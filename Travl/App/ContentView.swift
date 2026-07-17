@@ -5,13 +5,15 @@
 //  Created by iPHTech 34 on 15/07/26.
 //
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
+    
+    @StateObject private var tripViewModel = TripViewModel()
 
     var body: some View {
 
         DashboardView()
+            .environmentObject(tripViewModel)
     }
 }
 

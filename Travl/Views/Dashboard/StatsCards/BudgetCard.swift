@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BudgetCard: View {
     
+    let totalBudget: Double
+    
     var body: some View {
         
         VStack(alignment: .leading, spacing: 16) {
@@ -20,7 +22,7 @@ struct BudgetCard: View {
             
 //            Spacer()
 
-                        Text("$2,257")
+                        Text("₹\(Int(totalBudget))")
                             .font(.title)
                             .bold()
 
@@ -37,5 +39,7 @@ struct BudgetCard: View {
 
 
 #Preview {
-    BudgetCard()
+    BudgetCard(
+        totalBudget: 250000
+    )
 }

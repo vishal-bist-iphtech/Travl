@@ -6,41 +6,112 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TripCarousel: View {
+    
+    let trips: [TripEntity]
+    
+    @EnvironmentObject private var tripViewModel: TripViewModel
+    
+    @State private var showAddTrip = false
 
     var body: some View {
 
         VStack(alignment:.leading){
 
-            HStack{
+            HStack {
 
                 Text("All Trips")
                     .font(.title3)
-                    .bold()
+                    .fontWeight(.bold)
 
                 Spacer()
 
-                Button("See all"){
+                if trips.isEmpty {
 
+                    Button("Add Trip") {
+                        showAddTrip = true
+                    }
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.blue)
+
+                } else {
+
+                    NavigationLink("See More") {
+                        TripsView()
+                    }
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.blue)
                 }
             }
+            .padding(.horizontal)
+            .sheet(isPresented: $showAddTrip) {
 
-            ScrollView(.horizontal,showsIndicators:false){
+                AddTripView()
+                    .environmentObject(tripViewModel)
+            }
 
-                HStack(spacing:16){
+            if trips.isEmpty {
 
-                    TripCard()
+                ContentUnavailableView(
+                    "No Trips",
+                    systemImage: "airplane.departure",
+                    description: Text("Create your first trip to see it here.")
+                )
 
-                    TripCard()
+            } else {
 
-                    TripCard()
+                ScrollView(.horizontal, showsIndicators: false) {
+
+                    HStack(spacing: 16) {
+
+                        ForEach(trips, id: \.objectID) { trip in
+
+                            NavigationLink {
+
+                                TripDetailView(
+                                    trip: trip
+                                )
+
+                            } label: {
+
+                                TripCard(trip: trip)
+                                    .frame(width: 320)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+
+
 #Preview {
-    TripCarousel()
+
+    let context = PersistenceController.shared.container.viewContext
+
+    let trip = TripEntity(context: context)
+
+    trip.destination = "Paris"
+    trip.city = "Paris"
+    trip.country = "France"
+    trip.currency = "INR"
+    trip.budget = 120000
+    trip.status = "Upcoming"
+    trip.startDate = Date()
+    trip.endDate = Calendar.current.date(byAdding: .day, value: 5, to: Date())
+
+    return TripCarousel(
+        trips: [trip],
+    )
+    .padding()
+    .environmentObject(
+        TripViewModel()
+    )
 }

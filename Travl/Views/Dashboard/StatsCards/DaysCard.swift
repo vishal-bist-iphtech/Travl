@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DaysCard: View {
+    
+    let daysRemaining: Int?
 
     var body: some View {
 
@@ -21,7 +23,7 @@ struct DaysCard: View {
 
 //            Spacer()
 
-            Text("26")
+            Text(daysRemaining.map(String.init) ?? "--")
                 .font(.title)
                 .bold()
 
@@ -37,5 +39,7 @@ struct DaysCard: View {
 }
 
 #Preview {
-    DaysCard()
+    DaysCard(
+        daysRemaining: 14
+    )
 }

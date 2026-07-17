@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct NextTripCard: View {
+    
+    let trip: TripEntity?
+    let daysRemaining: Int?
     
     var body: some View {
         
@@ -38,7 +42,11 @@ struct NextTripCard: View {
                     
                     Spacer()
                     
-                    Text("26d away")
+                    Text(
+                        daysRemaining != nil
+                        ? "\(daysRemaining)d away"
+                        : "--"
+                    )
                         .font(.caption)
                         .bold()
                         .padding(.horizontal,12)
@@ -49,23 +57,65 @@ struct NextTripCard: View {
                 }
                 Spacer()
                 
-                Text("Goa, India")
+                Text(
+                    trip?.destination ?? "No Upcoming Trips"
+                )
                     .font(.title)
                     .bold()
                     .foregroundStyle(.white)
                 
-                Label("Goa . Aug 10, 2026 - Aug 18, 2026", systemImage: "location")
-                    .foregroundStyle(.white.opacity(0.9))
-                    .font(.subheadline)
+                Label {
+                    
+                    if let trip {
+                        
+                        Text("\(trip.city ?? ""), \(trip.country ?? "") • \(formattedDateRange)")
+                    } else { Text("Plan your next adventure")}
+                } icon: {
+                Image(systemName: "location")
+                }
+                .foregroundStyle(.white.opacity(0.9))
+                .font(.subheadline)
             }
             .padding()
         }
         .frame(height: 220)
         .clipShape(RoundedRectangle(cornerRadius: 25))
     }
+    
+    
+    private var formattedDateRange: String {
+
+        guard
+            let trip,
+            let start = trip.startDate,
+            let end = trip.endDate
+        else {
+            return ""
+        }
+
+        return "\(start.formatted(date: .abbreviated, time: .omitted)) - \(end.formatted(date: .abbreviated, time: .omitted))"
+    }
 }
 
-
 #Preview {
-    NextTripCard()
+
+    let context = PersistenceController.shared.container.viewContext
+
+    let trip = TripEntity(context: context)
+
+    trip.destination = "Goa"
+
+    trip.city = "Goa"
+
+    trip.country = "India"
+
+    trip.startDate = Date()
+
+    trip.endDate = Calendar.current.date(byAdding: .day, value: 5, to: Date())
+
+    return NextTripCard(
+        trip: trip,
+        daysRemaining: 5
+    )
+    .padding()
 }

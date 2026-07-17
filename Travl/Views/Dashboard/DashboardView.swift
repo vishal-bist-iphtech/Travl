@@ -8,6 +8,52 @@
 import SwiftUI
 
 struct DashboardView: View {
+    
+    @EnvironmentObject private var tripViewModel: TripViewModel
+    
+    private var upcomingTrips: [TripEntity] {
+
+        tripViewModel.trips
+            .filter {
+                guard let startDate = $0.startDate else {
+                    return false
+                }
+
+                return startDate >= Calendar.current.startOfDay(for: Date())
+            }
+            .sorted {
+                ($0.startDate ?? .distantFuture) <
+                ($1.startDate ?? .distantFuture)
+            }
+    }
+    
+    private var nextTrip: TripEntity? {
+
+        upcomingTrips.first
+    }
+    
+    private var totalBudget: Double {
+
+        upcomingTrips.reduce(0) { $0 + $1.budget }
+    }
+    
+    private var daysRemaining: Int? {
+
+        guard
+            let trip = nextTrip,
+            let startDate = trip.startDate
+        else {
+            return nil
+        }
+
+        return Calendar.current.dateComponents(
+            [.day],
+            from: Calendar.current.startOfDay(for: Date()),
+            to: Calendar.current.startOfDay(for: startDate)
+        ).day
+    }
+
+    
     var body: some View {
         
         NavigationStack {
@@ -15,25 +61,37 @@ struct DashboardView: View {
                 VStack(spacing: 20) {
                     HeaderView()
                     
-                    NextTripCard()
+                    NextTripCard(
+                        trip: nextTrip,
+                        daysRemaining:daysRemaining
+                    )
                     
                     HStack(spacing: 16) {
-                        BudgetCard()
-                        DaysCard()
+                        BudgetCard(
+                            totalBudget: totalBudget
+                        )
+                        DaysCard(
+                            daysRemaining: daysRemaining
+                        )
                     }
                     
                     PackingProgressCard()
                     
-                    TripCarousel()
+                    TripCarousel(
+                        trips: upcomingTrips
+                    )
                     MemoriesCarousel(memories: sampleMemories)
                 }
                 .padding()
             }
             .background(Color(.systemGroupedBackground))
-        }        
+        }
     }
 }
 
 #Preview {
     DashboardView()
+        .environmentObject(
+            TripViewModel()
+        )
 }

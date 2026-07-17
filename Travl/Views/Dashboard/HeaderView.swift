@@ -12,7 +12,7 @@ struct HeaderView: View {
     var body: some View {
         
         HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading) {
                 Text("Good Morning")
                     .foregroundStyle(.secondary)
                 
@@ -39,7 +39,7 @@ struct HeaderView: View {
                     
                 } label: {
                     Text("VB")
-                        .font(.title)
+                        .font(.title2)
                         .bold()
                         .padding(6)
                         .background(.ultraThinMaterial, in: Circle())
