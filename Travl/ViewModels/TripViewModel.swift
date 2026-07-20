@@ -66,14 +66,14 @@ final class TripViewModel: ObservableObject {
             status: status
             )
         
-        loadTrips()
+        refresh()
     }
     
     func deleteTrip(_ trip: TripEntity) {
         
         coreDataService.deleteTrip(trip)
         
-        loadTrips()
+        refresh()
     }
     
     func updateTrip(
@@ -100,11 +100,13 @@ final class TripViewModel: ObservableObject {
             status: status
         )
 
-        loadTrips()
+        refresh()
     }
     
     func refresh() {
         loadTrips()
+        
+        print(trips.first?.destination ?? "No Trip")
     }
     
     

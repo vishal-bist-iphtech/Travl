@@ -14,6 +14,7 @@ struct MemoryCarousel: View {
     let memories: [MemoryEntity]
 
     @EnvironmentObject private var memoryViewModel: MemoryViewModel
+    let trip: TripEntity?
 
     @State private var showAddMemory = false
 
@@ -40,7 +41,7 @@ struct MemoryCarousel: View {
 
                     NavigationLink {
 
-                        MemoriesView()
+                        MemoriesView(trip: nil)
 
                     } label: {
 
@@ -54,7 +55,7 @@ struct MemoryCarousel: View {
             .sheet(isPresented: $showAddMemory) {
 
                 NavigationStack {
-                    AddMemoryView()
+                    AddMemoryView(trip: trip)
                 }
                 .environmentObject(memoryViewModel)
             }
@@ -108,7 +109,8 @@ struct MemoryCarousel: View {
     memory.rating = 4
     
      return MemoryCarousel(
-            memories: [memory]
+            memories: [memory],
+            trip: nil
         )
      .padding()
         .environmentObject(MemoryViewModel())

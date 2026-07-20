@@ -14,8 +14,8 @@ struct AddMemoryView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var memoryViewModel: MemoryViewModel
 
+    let trip: TripEntity?
     
-
     @State private var title = ""
     @State private var note = ""
     @State private var rating = 5
@@ -144,7 +144,8 @@ struct AddMemoryView: View {
                             note: note,
                             imageData: imageData,
                             rating: Int16(rating),
-                            date: date
+                            date: date,
+                            trip: trip
                         )
                         
                         dismiss()
@@ -167,6 +168,6 @@ struct AddMemoryView: View {
     let trip = TripEntity(context: context)
     trip.destination = "Goa"
 
-    return AddMemoryView()
+    return AddMemoryView(trip: nil)
         .environmentObject(MemoryViewModel())
 }

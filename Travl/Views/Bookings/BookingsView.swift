@@ -10,8 +10,31 @@ import SwiftUI
 struct BookingsView: View {
 
     @EnvironmentObject private var bookingViewModel: BookingViewModel
+    
+    let trip: TripEntity?
 
     @State private var showAddBooking = false
+    
+    private var displayedBookings: [BookingEntity] {
+
+        if let trip {
+
+            return bookingViewModel.bookings
+                .filter { $0.trip == trip }
+                .sorted {
+                    ($0.startDate ?? .distantFuture) <
+                    ($1.startDate ?? .distantFuture)
+                }
+
+        } else {
+
+            return bookingViewModel.bookings
+                .sorted {
+                    ($0.startDate ?? .distantFuture) >
+                    ($1.startDate ?? .distantFuture)
+                }
+        }
+    }
 
     var body: some View {
 
@@ -33,7 +56,7 @@ struct BookingsView: View {
 
                         LazyVStack(spacing: 16) {
 
-                            ForEach(bookingViewModel.bookings,
+                            ForEach(displayedBookings,
                                     id: \.objectID) { booking in
 
                                 NavigationLink {
@@ -72,12 +95,16 @@ struct BookingsView: View {
             }
             .padding()
         }
-        .navigationTitle("Bookings")
+        .navigationTitle(
+            trip == nil
+            ? "Bookings"
+            : "\(trip?.destination ?? "") Bookings"
+        )
         .sheet(isPresented: $showAddBooking) {
 
             NavigationStack {
 
-                AddBookingView()
+                AddBookingView(trip: trip)
             }
             .environmentObject(bookingViewModel)
         }
@@ -88,7 +115,7 @@ struct BookingsView: View {
 
     NavigationStack {
 
-        BookingsView()
+        BookingsView(trip: nil)
     }
     .environmentObject(BookingViewModel())
 }

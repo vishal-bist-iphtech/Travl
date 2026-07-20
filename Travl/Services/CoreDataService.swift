@@ -143,7 +143,8 @@ final class CoreDataService {
         note: String,
         imageData: Data?,
         rating: Int16,
-        date: Date
+        date: Date,
+        trip: TripEntity?
     ) {
 
         let memory = MemoryEntity(context: context)
@@ -154,6 +155,7 @@ final class CoreDataService {
         memory.imageData = imageData
         memory.rating = rating
         memory.date = date
+        memory.trip = trip
 
         saveContext()
 
@@ -198,7 +200,8 @@ final class CoreDataService {
         amount: Double,
         currency: String,
         status: String,
-        notes: String
+        notes: String,
+        trip: TripEntity?
     ) {
         
         let booking = BookingEntity(context: context)
@@ -215,6 +218,7 @@ final class CoreDataService {
         booking.status = status
         booking.notes = notes
         booking.createdAt = Date()
+        booking.trip = trip
         
         
         saveContext()

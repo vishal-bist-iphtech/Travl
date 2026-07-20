@@ -58,7 +58,8 @@ final class BookingViewModel: ObservableObject {
         amount: Double,
         currency: String,
         status: String,
-        notes: String
+        notes: String,
+        trip: TripEntity?
     ) {
         
         coreDataService.addBooking(
@@ -71,7 +72,8 @@ final class BookingViewModel: ObservableObject {
             amount: amount,
             currency: currency,
             status: status,
-            notes: notes
+            notes: notes,
+            trip: trip
         )
         
         refresh()

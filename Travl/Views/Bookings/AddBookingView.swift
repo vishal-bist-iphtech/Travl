@@ -11,6 +11,8 @@ struct AddBookingView: View {
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var bookingViewModel: BookingViewModel
+    
+    let trip: TripEntity?
 
     @State private var title = ""
     @State private var bookingType = "Flight"
@@ -147,7 +149,8 @@ struct AddBookingView: View {
                             amount: Double(amount) ?? 0,
                             currency: currency,
                             status: status,
-                            notes: notes
+                            notes: notes,
+                            trip: trip
                         )
 
                         dismiss()
@@ -166,7 +169,7 @@ struct AddBookingView: View {
 
     NavigationStack {
 
-        AddBookingView()
+        AddBookingView(trip: nil)
     }
     .environmentObject(BookingViewModel())
 }

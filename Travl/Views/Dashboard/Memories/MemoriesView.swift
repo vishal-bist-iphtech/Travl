@@ -13,14 +13,37 @@ import SwiftUI
 struct MemoriesView: View {
 
     @EnvironmentObject private var memoryViewModel: MemoryViewModel
+    
+    let trip: TripEntity?
 
     @State private var showAddMemory = false
+    
+    private var displayedMemories: [MemoryEntity] {
+
+        if let trip {
+
+            return memoryViewModel.memories
+                .filter { $0.trip == trip }
+                .sorted {
+                    ($0.date ?? .distantPast) >
+                    ($1.date ?? .distantPast)
+                }
+
+        } else {
+
+            return memoryViewModel.memories
+                .sorted {
+                    ($0.date ?? .distantPast) >
+                    ($1.date ?? .distantPast)
+                }
+        }
+    }
 
     var body: some View {
 
         ZStack(alignment: .bottomTrailing) {
 
-            if memoryViewModel.memories.isEmpty {
+            if displayedMemories.isEmpty {
 
                 ContentUnavailableView(
                     "No Memories",
@@ -34,7 +57,7 @@ struct MemoriesView: View {
 
                     LazyVStack(spacing: 16) {
 
-                        ForEach(memoryViewModel.memories,
+                        ForEach(displayedMemories,
                                 id: \.objectID) { memory in
 
                             NavigationLink {
@@ -68,23 +91,25 @@ struct MemoriesView: View {
             }
             .padding()
         }
-        .navigationTitle("Memories")
+        .navigationTitle(
+            trip == nil ? "Memories" : (trip?.destination ?? "Memories")
+        )
         .sheet(isPresented: $showAddMemory) {
-
+            
             NavigationStack {
 
-                AddMemoryView()
+                AddMemoryView(trip: trip)
+                    .environmentObject(memoryViewModel)
             }
-            .environmentObject(memoryViewModel)
         }
     }
 }
 
 #Preview {
 
+    NavigationStack {
 
-    return NavigationStack {
-        MemoriesView()
+        MemoriesView(trip: nil)
     }
     .environmentObject(MemoryViewModel())
 }

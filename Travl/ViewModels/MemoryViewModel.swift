@@ -28,7 +28,8 @@ final class MemoryViewModel: ObservableObject {
         note: String,
         imageData: Data?,
         rating: Int16,
-        date: Date
+        date: Date,
+        trip: TripEntity?
     ) {
 
         coreDataService.addMemory(
@@ -36,7 +37,8 @@ final class MemoryViewModel: ObservableObject {
             note: note,
             imageData: imageData,
             rating: rating,
-            date: date
+            date: date,
+            trip: trip
         )
 
         refresh()

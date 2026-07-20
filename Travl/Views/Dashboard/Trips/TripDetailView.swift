@@ -14,8 +14,31 @@ struct TripDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var tripViewModel: TripViewModel
+    @EnvironmentObject private var memoryViewModel: MemoryViewModel
+    
+    @State private var showMemoryOptions = false
+    @State private var showAddMemory = false
+    @State private var showSelectMemory = false
     
     @State private var showDeleteAlert = false
+    
+    private var memories: [MemoryEntity] {
+
+        let set = trip.memories as? Set<MemoryEntity> ?? []
+
+        return set.sorted {
+            ($0.date ?? .distantPast) > ($1.date ?? .distantPast)
+        }
+    }
+
+    private var bookings: [BookingEntity] {
+
+        let set = trip.bookings as? Set<BookingEntity> ?? []
+
+        return set.sorted {
+            ($0.startDate ?? .distantFuture) < ($1.startDate ?? .distantFuture)
+        }
+    }
 
     var body: some View {
 
@@ -23,7 +46,6 @@ struct TripDetailView: View {
 
             VStack(spacing: 24) {
 
-                // MARK: Header
 
                 VStack(alignment: .leading, spacing: 8) {
 
@@ -67,6 +89,145 @@ struct TripDetailView: View {
 
             
 
+            }
+            .padding()
+            
+            VStack(alignment: .leading, spacing: 16) {
+
+                HStack {
+
+                    Text("Memories")
+                        .font(.title3.bold())
+
+                    Spacer()
+
+                    Button {
+
+                        showMemoryOptions = true
+
+                    } label: {
+
+                        Label("Add", systemImage: "plus")
+                    }
+                }
+
+                if memories.isEmpty {
+
+                    ContentUnavailableView(
+                        "No Memories",
+                        systemImage: "photo.stack",
+                        description: Text("This trip doesn't have any memories yet.")
+                    )
+
+                } else {
+
+                    ForEach(memories.prefix(3), id: \.objectID) { memory in
+
+                        NavigationLink {
+
+                            MemoryDetailView(memory: memory)
+
+                        } label: {
+
+                            MemoryCard(memory: memory)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    if memories.count > 2 {
+
+                        NavigationLink("See All") {
+
+                            MemoriesView(trip: trip)
+                        }
+                    }
+                }
+            }
+            .confirmationDialog(
+                "Add Memory",
+                isPresented: $showMemoryOptions,
+                titleVisibility: .visible
+            ) {
+
+                Button("Create New Memory") {
+
+                    showAddMemory = true
+                }
+
+                Button("Add Existing Memory") {
+
+                    showSelectMemory = true
+                }
+
+                Button("Cancel", role: .cancel) { }
+            }
+            .sheet(isPresented: $showAddMemory) {
+
+                NavigationStack {
+
+                    AddMemoryView(trip: trip)
+                }
+            }
+            .sheet(isPresented: $showSelectMemory) {
+
+                NavigationStack {
+
+                    SelectMemoryView(trip: trip)
+                        .environmentObject(memoryViewModel)
+                }
+            }
+            .padding()
+            
+            
+            VStack(alignment: .leading, spacing: 16) {
+
+                HStack {
+
+                    Text("Bookings")
+                        .font(.title3.bold())
+
+                    Spacer()
+
+                    Button("Add") {
+
+                    }
+                }
+
+                if bookings.isEmpty {
+
+                    ContentUnavailableView(
+                        "No Bookings",
+                        systemImage: "ticket",
+                        description: Text("This trip doesn't have any bookings yet.")
+                    )
+
+                } else {
+
+                    ForEach(bookings.prefix(2), id: \.objectID) { booking in
+
+                        NavigationLink {
+
+                            BookingDetailView(
+                                booking: booking
+                            )
+
+                        } label: {
+
+                            BookingCard(
+                                booking: booking
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    if bookings.count > 2 {
+
+                        NavigationLink("See All") {
+
+                            BookingsView(trip: nil)
+                        }
+                    }
+                }
             }
             .padding()
         }
@@ -138,4 +299,6 @@ struct TripDetailView: View {
     .environmentObject(
         TripViewModel()
     )
+    .environmentObject(MemoryViewModel())
+    .environmentObject(BookingViewModel())
 }

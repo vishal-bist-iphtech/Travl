@@ -37,7 +37,7 @@ struct ContentView: View {
                     }
 
                     NavigationStack {
-                        BookingsView()
+                        BookingsView(trip: nil)
                     }
                     .tabItem {
                         Label("Bookings", systemImage: "ticket.fill")

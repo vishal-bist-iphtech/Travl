@@ -82,7 +82,8 @@ struct DashboardView: View {
                         trips: tripViewModel.trips
                     )
                     MemoryCarousel(
-                        memories: memoryViewModel.memories
+                        memories: memoryViewModel.memories,
+                        trip: nil
                     )
                 }
                 .padding()
