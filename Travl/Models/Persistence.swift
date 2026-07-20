@@ -9,6 +9,8 @@ import CoreData
 
 struct PersistenceController {
     static let shared = PersistenceController()
+    
+    static let preview = PersistenceController()
 
     let container: NSPersistentContainer
 
@@ -20,6 +22,7 @@ struct PersistenceController {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
 }
