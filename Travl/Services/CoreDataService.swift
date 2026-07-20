@@ -120,7 +120,7 @@ final class CoreDataService {
         saveContext()
     }
     
-// ---------------------> MARK: Memory Functions
+// --------------->     MARK: Memory Functions
     func fetchMemories() -> [MemoryEntity] {
 
         let request: NSFetchRequest<MemoryEntity> = MemoryEntity.fetchRequest()
@@ -169,5 +169,93 @@ final class CoreDataService {
 
         saveContext()
     }
+    
+    
+// --------------->     MARK: Booking Functions
+    func fetchBookings() -> [BookingEntity] {
+        
+        let request: NSFetchRequest<BookingEntity> = BookingEntity.fetchRequest()
+        
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "startDate", ascending: true)
+        ]
+        
+        do {
+            return try context.fetch(request)
+        } catch {
+            print("Error while fetching bookings: \n\(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    func addBooking(
+        title: String,
+        bookingType: String,
+        provider: String,
+        bookingReference: String,
+        startDate: Date,
+        endDate: Date,
+        amount: Double,
+        currency: String,
+        status: String,
+        notes: String
+    ) {
+        
+        let booking = BookingEntity(context: context)
+        
+        booking.id = UUID()
+        booking.title = title
+        booking.bookingType = bookingType
+        booking.provider = provider
+        booking.bookingReference = bookingReference
+        booking.startDate = startDate
+        booking.endDate = endDate
+        booking.amount = amount
+        booking.currency = currency
+        booking.status = status
+        booking.notes = notes
+        booking.createdAt = Date()
+        
+        
+        saveContext()
+        
+    }
+    
+    func updateBooking(
+        booking: BookingEntity,
+        title: String,
+        bookingType: String,
+        provider: String,
+        bookingReference: String,
+        startDate: Date,
+        endDate: Date?,
+        amount: Double,
+        currency: String,
+        status: String,
+        notes: String
+    ) {
+        
+        booking.title = title
+        booking.bookingType = bookingType
+        booking.provider = provider
+        booking.bookingReference = bookingReference
+        booking.startDate = startDate
+        booking.endDate = endDate
+        booking.amount = amount
+        booking.currency = currency
+        booking.status = status
+        booking.notes = notes
+        
+        saveContext()
+        
+    }
+    
+    func deleteBooking(_ booking: BookingEntity) {
+        
+        context.delete(booking)
+        
+        saveContext()
+    }
+
     
 }
