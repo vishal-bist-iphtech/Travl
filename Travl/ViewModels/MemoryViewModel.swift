@@ -9,14 +9,18 @@ import SwiftUI
 import Combine
 
 final class MemoryViewModel: ObservableObject {
-
-    @Published var memories: [MemoryEntity] = []
-
+    
+    @Published private(set) var memories: [MemoryEntity] = []
+    
     private let coreDataService = CoreDataService.shared
+    
+    init() {
+        loadMemories()
+    }
 
-    func loadMemories(for trip: TripEntity) {
+    private func loadMemories() {
 
-        memories = coreDataService.fetchMemories(for: trip)
+        memories = coreDataService.fetchMemories()
     }
 
     func addMemory(
@@ -24,8 +28,7 @@ final class MemoryViewModel: ObservableObject {
         note: String,
         imageData: Data?,
         rating: Int16,
-        date: Date,
-        trip: TripEntity
+        date: Date
     ) {
 
         coreDataService.addMemory(
@@ -33,25 +36,69 @@ final class MemoryViewModel: ObservableObject {
             note: note,
             imageData: imageData,
             rating: rating,
-            date: date,
-            trip: trip
+            date: date
         )
 
-        loadMemories(for: trip)
+        refresh()
+    }
+    
+    func updateMemory(
+        _ memory: MemoryEntity,
+        title: String,
+        note: String,
+        imageData: Data?,
+        rating: Int16,
+        date: Date
+    ) {
+        
+        memory.title = title
+        memory.note = note
+        memory.imageData = imageData
+        memory.rating = rating
+        memory.date = date
+        
+        coreDataService.updateMemory()
+        
+        refresh()
     }
 
     func deleteMemory(
-        _ memory: MemoryEntity,
-        trip: TripEntity
+        _ memory: MemoryEntity
     ) {
 
         coreDataService.deleteMemory(memory)
 
-        loadMemories(for: trip)
+        refresh()
     }
-
-    func refresh(for trip: TripEntity) {
-
-        loadMemories(for: trip)
+    
+    func refresh() {
+        loadMemories()
     }
+    
+    func toggleFavorite(for memory: MemoryEntity) {
+        
+        memory.isFavorite.toggle()
+        
+        coreDataService.updateMemory()
+        
+        refresh()
+    }
+    
+    var recentMemories: [MemoryEntity] {
+
+        memories
+            .sorted {
+                ($0.date ?? .distantPast) > ($1.date ?? .distantPast)
+            }
+            .prefix(5)
+            .map { $0 }
+    }
+    
+    var favoriteMemories: [MemoryEntity] {
+
+        memories.filter {
+            $0.isFavorite
+        }
+    }   
+
 }
