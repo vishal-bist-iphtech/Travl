@@ -13,7 +13,7 @@ struct AddTripView: View {
     
     @EnvironmentObject private var tripViewModel: TripViewModel
     
-    @State private var destionation = ""
+    @State private var destination = ""
     @State private var country = ""
     @State private var city = ""
     @State private var startDate = Date()
@@ -30,11 +30,11 @@ struct AddTripView: View {
                 
                 Section("Destination") {
                     
-                    TextField("Destination", text: $destionation)
-                    
-                    TextField("Country", text: $country)
-                    
+                    TextField("Title", text: $destination)
                     TextField("City", text: $city)
+                    TextField("State or Country", text: $country)
+                    
+                    
                 }
                 
                 Section("Travel Dates") {
@@ -54,13 +54,30 @@ struct AddTripView: View {
                 
                 Section("Budget") {
                     
-                    TextField("Budget", text: $budget)
-                        .keyboardType(.decimalPad)
-                    
-                    Picker("Currency", selection: $selectedCurrency) {
-                        ForEach(tripViewModel.currencies, id: \.self) {
-                            Text($0)
-                        }
+                    HStack(spacing: 10){
+                        
+                        
+                       Menu {
+                            
+                            ForEach(tripViewModel.currencies, id: \.self) { currency in
+                                Button(currency) {
+                                    selectedCurrency = currency
+                                }
+                            }
+                       } label: {
+                           HStack(spacing: 4) {
+                               Text(selectedCurrency)
+                               Image(systemName: "chevron.down")
+                                   .font(.caption2)
+                           }
+                           .frame(width: 50)
+                       }
+                        Divider()
+                            .background(Color.primary)
+                        TextField("Budget", text: $budget)
+                            .keyboardType(.decimalPad)
+                            .font(.system(size: 18))
+                            .padding(.horizontal)
                     }
                 }
                 
@@ -85,12 +102,12 @@ struct AddTripView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         
-                        guard !destionation.isEmpty,!country.isEmpty,!city.isEmpty,
+                        guard !destination.isEmpty,!country.isEmpty,!city.isEmpty,
                               let budgetValue = Double(budget)
                         else { return }
                         
                         tripViewModel.addTrip(
-                            destination: destionation,
+                            destination: destination,
                             country: country,
                             city: city,
                             startDate: startDate,
@@ -102,6 +119,9 @@ struct AddTripView: View {
                         
                         dismiss()
                     }
+                    .disabled(
+                        destination.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
                 }
             }
         }

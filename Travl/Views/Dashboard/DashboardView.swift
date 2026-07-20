@@ -10,6 +10,7 @@ import SwiftUI
 struct DashboardView: View {
     
     @EnvironmentObject private var tripViewModel: TripViewModel
+    @EnvironmentObject private var memoryViewModel: MemoryViewModel
     
     private var upcomingTrips: [TripEntity] {
 
@@ -78,9 +79,11 @@ struct DashboardView: View {
                     PackingProgressCard()
                     
                     TripCarousel(
-                        trips: upcomingTrips
+                        trips: tripViewModel.trips
                     )
-                    MemoriesCarousel(memories: sampleMemories)
+                    MemoryCarousel(
+                        memories: memoryViewModel.memories
+                    )
                 }
                 .padding()
             }
@@ -91,7 +94,6 @@ struct DashboardView: View {
 
 #Preview {
     DashboardView()
-        .environmentObject(
-            TripViewModel()
-        )
+        .environmentObject(TripViewModel())
+        .environmentObject(MemoryViewModel())
 }

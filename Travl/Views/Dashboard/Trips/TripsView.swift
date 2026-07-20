@@ -10,7 +10,7 @@ import CoreData
 
 struct TripsView: View {
 
-    @StateObject private var tripViewModel = TripViewModel()
+    @EnvironmentObject private var tripViewModel: TripViewModel
     
     @State private var showAddTrip = false
 
@@ -75,7 +75,10 @@ struct TripsView: View {
             .navigationTitle("Trips")
             .sheet(isPresented: $showAddTrip) {
                 
-                AddTripView()
+                NavigationStack {
+                       AddTripView()
+                   }
+                   .environmentObject(tripViewModel)
             }
         }
     }
@@ -83,4 +86,5 @@ struct TripsView: View {
 
 #Preview {
     TripsView()
+        .environmentObject(TripViewModel())
 }

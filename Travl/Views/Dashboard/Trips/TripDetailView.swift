@@ -10,9 +10,12 @@ import CoreData
 
 struct TripDetailView: View {
 
-    let trip: TripEntity
+    @ObservedObject var trip: TripEntity
 
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var tripViewModel: TripViewModel
+    
+    @State private var showDeleteAlert = false
 
     var body: some View {
 
@@ -62,40 +65,7 @@ struct TripDetailView: View {
                     }
                 }
 
-                // MARK: Modules
-
-                VStack(spacing: 12) {
-
-                    NavigationLink("Itinerary") {
-                        Text("Itinerary")
-                    }
-
-                    NavigationLink("Expenses") {
-                        Text("Expenses")
-                    }
-
-                    NavigationLink("Bookings") {
-                        Text("Bookings")
-                    }
-
-                    NavigationLink("Packing List") {
-                        Text("Packing List")
-                    }
-
-                    NavigationLink("Memories") {
-                        Text("Memories")
-                    }
-
-                    NavigationLink("Weather") {
-                        Text("Weather")
-                    }
-
-                    NavigationLink("Map") {
-                        Text("Map")
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-                .frame(maxWidth: .infinity)
+            
 
             }
             .padding()
@@ -104,19 +74,42 @@ struct TripDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
 
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
 
                 NavigationLink {
 
-                    EditTripView(
-                        trip: trip
-                    )
+                    EditTripView(trip: trip)
+                        .environmentObject(tripViewModel)
 
                 } label: {
 
                     Image(systemName: "square.and.pencil")
                 }
+
+                Button(role: .destructive) {
+
+                    showDeleteAlert = true
+
+                } label: {
+
+                    Image(systemName: "trash")
+                }
             }
+        }
+        .alert("Delete Trip?", isPresented: $showDeleteAlert) {
+
+            Button("Delete", role: .destructive) {
+
+                tripViewModel.deleteTrip(trip)
+
+                dismiss()
+            }
+
+            Button("Cancel", role: .cancel) { }
+
+        } message: {
+
+            Text("This action cannot be undone.")
         }
     }
 }

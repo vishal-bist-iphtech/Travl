@@ -44,7 +44,7 @@ struct NextTripCard: View {
                     
                     Text(
                         daysRemaining != nil
-                        ? "\(daysRemaining)d away"
+                        ? "\(daysRemaining ?? 0)d away"
                         : "--"
                     )
                         .font(.caption)
@@ -99,7 +99,7 @@ struct NextTripCard: View {
 
 #Preview {
 
-    let context = PersistenceController.shared.container.viewContext
+    let context = PersistenceController.preview.container.viewContext
 
     let trip = TripEntity(context: context)
 

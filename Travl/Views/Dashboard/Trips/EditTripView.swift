@@ -46,9 +46,10 @@ struct EditTripView: View {
 
             Section("Destination") {
 
-                TextField("Destination", text: $destination)
-                TextField("Country", text: $country)
+                TextField("Title", text: $destination)
                 TextField("City", text: $city)
+                TextField("Country", text: $country)
+                
             }
 
             Section("Travel Dates") {
@@ -83,11 +84,10 @@ struct EditTripView: View {
                            Image(systemName: "chevron.down")
                                .font(.caption2)
                        }
-                       .frame(width: 60)
+                       .frame(width: 50)
                    }
                     Divider()
-                        .frame(width: 1)
-                        .background(Color.secondary)
+                        .background(Color.primary)
                     TextField("Budget", text: $budget)
                         .keyboardType(.decimalPad)
                         .font(.system(size: 18))
@@ -106,10 +106,20 @@ struct EditTripView: View {
                 }
             }
 
-            Section {
-
-                Button("Save Changes") {
-
+           
+        }
+        .navigationTitle("Edit Trip")
+        .toolbar {
+            
+//            ToolbarItem(placement: .topBarLeading) {
+//                Button("Cancel") {
+//                    dismiss()
+//                }
+//            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save") {
+                    
                     guard
                         !destination.isEmpty,
                         !country.isEmpty,
@@ -132,36 +142,12 @@ struct EditTripView: View {
                     )
 
                     dismiss()
+                    
                 }
-            }
-
-            Section {
-
-                Button(role: .destructive) {
-
-                    showDeleteConfirmation = true
-
-                } label: {
-
-                    Text("Delete Trip")
-                }
+                
             }
         }
-        .navigationTitle("Edit Trip")
-        .confirmationDialog(
-            "Delete this trip?",
-            isPresented: $showDeleteConfirmation
-        ) {
-
-            Button("Delete", role: .destructive) {
-
-                tripViewModel.deleteTrip(trip)
-
-                dismiss()
-            }
-
-            Button("Cancel", role: .cancel) { }
-        }
+        
     }
 }
 
@@ -171,7 +157,7 @@ struct EditTripView: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Paris"
+    trip.destination = "Big Ben"
     trip.country = "France"
     trip.city = "Paris"
     trip.budget = 120000

@@ -59,7 +59,7 @@ struct TripCarousel: View {
                 ContentUnavailableView(
                     "No Trips",
                     systemImage: "airplane.departure",
-                    description: Text("Create your first trip to see it here.")
+                    description: Text("Add your first trip here.")
                 )
 
             } else {
@@ -94,7 +94,7 @@ struct TripCarousel: View {
 
 #Preview {
 
-    let context = PersistenceController.shared.container.viewContext
+    let context = PersistenceController.preview.container.viewContext
 
     let trip = TripEntity(context: context)
 
