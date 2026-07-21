@@ -14,6 +14,7 @@ struct ContentView: View {
     @StateObject private var tripViewModel = TripViewModel()
     @StateObject private var memoryViewModel = MemoryViewModel()
     @StateObject private var bookingViewModel = BookingViewModel()
+    @StateObject private var expenseViewModel = ExpenseViewModel()
 
     @State private var showSplash = true
 
@@ -44,10 +45,15 @@ struct ContentView: View {
                     }
 
                     NavigationStack {
-                        Text("Expenses")
+
+                        ExpenseDashboardView()
                     }
                     .tabItem {
-                        Label("Expenses", systemImage: "indianrupeesign.circle.fill")
+
+                        Label(
+                            "Expenses",
+                            systemImage: "indianrupeesign.circle.fill"
+                        )
                     }
 
                     NavigationStack {
@@ -67,6 +73,7 @@ struct ContentView: View {
                 .environmentObject(tripViewModel)
                 .environmentObject(memoryViewModel)
                 .environmentObject(bookingViewModel)
+                .environmentObject(expenseViewModel)
             }
         }
         .onAppear {

@@ -18,10 +18,13 @@
     <entity name="ExpenseEntity" representedClassName="ExpenseEntity" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="category" attributeType="String"/>
+        <attribute name="currency" attributeType="String"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="paymentMethod" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="expenses_trip" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="expenses" inverseEntity="TripEntity"/>
+        <relationship name="trip" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="expenses" inverseEntity="TripEntity"/>
     </entity>
     <entity name="ItineraryEntity" representedClassName="ItineraryEntity" syncable="YES" codeGenerationType="class"/>
     <entity name="MemoryEntity" representedClassName="MemoryEntity" syncable="YES" codeGenerationType="class">
@@ -45,7 +48,7 @@
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="status" attributeType="String"/>
         <relationship name="bookings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BookingEntity" inverseName="trip" inverseEntity="BookingEntity"/>
-        <relationship name="expenses" toMany="YES" deletionRule="Nullify" destinationEntity="ExpenseEntity" inverseName="expenses_trip" inverseEntity="ExpenseEntity"/>
+        <relationship name="expenses" toMany="YES" deletionRule="Nullify" destinationEntity="ExpenseEntity" inverseName="trip" inverseEntity="ExpenseEntity"/>
         <relationship name="memories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MemoryEntity" inverseName="trip" inverseEntity="MemoryEntity"/>
     </entity>
 </model>

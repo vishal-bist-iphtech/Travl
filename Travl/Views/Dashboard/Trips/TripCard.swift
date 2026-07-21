@@ -10,7 +10,7 @@ import CoreData
 
 struct TripCard: View {
     
-    @ObservedObject var trip: TripEntity
+    let trip: TripEntity
 
     var body: some View {
 

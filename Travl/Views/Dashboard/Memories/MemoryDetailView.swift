@@ -139,9 +139,14 @@ struct MemoryDetailView: View {
         .alert("Delete Memory?", isPresented: $showDeleteAlert) {
 
             Button("Delete", role: .destructive) {
-
-                memoryViewModel.deleteMemory(memory)
-
+                
+                if memory.trip != nil {
+                    memory.trip = nil
+                }
+                else {
+                    memoryViewModel.deleteMemory(memory)
+                   
+                }
                 dismiss()
             }
 

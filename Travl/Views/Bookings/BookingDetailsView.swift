@@ -13,7 +13,7 @@ struct BookingDetailView: View {
     @EnvironmentObject private var bookingViewModel: BookingViewModel
     @Environment(\.dismiss) private var dismiss
 
-    let booking: BookingEntity
+    @ObservedObject var booking: BookingEntity
     
     @State private var showEditBooking = false
     @State private var showDeleteAlert = false

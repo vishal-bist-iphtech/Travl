@@ -47,6 +47,8 @@ final class CoreDataService {
     
    
     // ------------->  MARK: Trip Functions
+    
+    
     func addTrip(
         destination: String,
         country: String,
@@ -120,7 +122,11 @@ final class CoreDataService {
         saveContext()
     }
     
+    
+    
 // --------------->     MARK: Memory Functions
+    
+    
     func fetchMemories() -> [MemoryEntity] {
 
         let request: NSFetchRequest<MemoryEntity> = MemoryEntity.fetchRequest()
@@ -155,7 +161,11 @@ final class CoreDataService {
         memory.imageData = imageData
         memory.rating = rating
         memory.date = date
+        print("Trip parameter:", trip?.destination ?? "nil")
+        
         memory.trip = trip
+
+        print("Assigned trip:", memory.trip?.destination ?? "nil")
 
         saveContext()
 
@@ -174,6 +184,8 @@ final class CoreDataService {
     
     
 // --------------->     MARK: Booking Functions
+    
+    
     func fetchBookings() -> [BookingEntity] {
         
         let request: NSFetchRequest<BookingEntity> = BookingEntity.fetchRequest()
@@ -260,6 +272,79 @@ final class CoreDataService {
         
         saveContext()
     }
+    
+    
+    
+// --------------->     MARK: Expenses Functions
+    
+    
+    func fetchExpenses() -> [ExpenseEntity] {
+        let request: NSFetchRequest<ExpenseEntity> = ExpenseEntity.fetchRequest()
+        
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "date", ascending: false)
+        ]
+        
+        do {
+            return try context.fetch(request)
+        } catch {
+            print("Error while fetching expenses.\n\(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    func addExpense(
+        title: String,
+        amount: Double,
+        category: String,
+        date: Date,
+        notes: String,
+        paymentMethod: String,
+        currency: String,
+        trip: TripEntity?
+    ) {
+        let expense = ExpenseEntity(context: context)
+        
+        expense.id = UUID()
+        expense.title = title
+        expense.amount = amount
+        expense.category = category
+        expense.date = date
+        expense.notes = notes
+        expense.paymentMethod = paymentMethod
+        expense.currency = currency
+        expense.trip = trip
+        
+        saveContext()
+    }
+   
+    func updateExpense(
+        expense: ExpenseEntity,
+        title: String,
+        amount: Double,
+        category: String,
+        date: Date,
+        notes: String,
+        paymentMethod: String,
+        currency: String
+    ) {
 
+        expense.title = title
+        expense.amount = amount
+        expense.category = category
+        expense.date = date
+        expense.notes = notes
+        expense.paymentMethod = paymentMethod
+        expense.currency = currency
+
+        saveContext()
+    }
+    
+    func deleteExpense(_ expense: ExpenseEntity) {
+
+        context.delete(expense)
+
+        saveContext()
+    }
     
 }

@@ -40,7 +40,7 @@ final class MemoryViewModel: ObservableObject {
             date: date,
             trip: trip
         )
-
+        
         refresh()
     }
     
