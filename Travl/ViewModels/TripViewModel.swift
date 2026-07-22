@@ -109,5 +109,31 @@ final class TripViewModel: ObservableObject {
         print(trips.first?.destination ?? "No Trip")
     }
     
+    // MARK: - Upcoming Trips
+
+    var upcomingTrips: [TripEntity] {
+
+        trips
+            .filter {
+
+                guard let startDate = $0.startDate else {
+                    return false
+                }
+
+                return startDate >= Calendar.current.startOfDay(for: Date())
+            }
+            .sorted {
+
+                ($0.startDate ?? .distantFuture) <
+                ($1.startDate ?? .distantFuture)
+            }
+    }
+
+    var nextTrip: TripEntity? {
+
+        upcomingTrips.first
+        
+    }
+    
     
 }
