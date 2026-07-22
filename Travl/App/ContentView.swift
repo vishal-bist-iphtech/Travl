@@ -46,7 +46,7 @@ struct ContentView: View {
 
                     NavigationStack {
 
-                        ExpenseDashboardView()
+                        ExpensesView()
                     }
                     .tabItem {
 
