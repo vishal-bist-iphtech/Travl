@@ -9,8 +9,17 @@ import SwiftUI
 import Charts
 
 struct ExpenseCategoryChart: View {
+    
+    @State private var selectedCategory: ExpenseCategory?
 
     let categories: [ExpenseCategory]
+    
+    private var totalAmount: Double {
+
+        categories.reduce(0) { result, category in
+            result + category.amount
+        }
+    }
 
     var body: some View {
 
@@ -28,13 +37,32 @@ struct ExpenseCategoryChart: View {
                         category.amount
                     ),
 
-                    innerRadius: .ratio(0.60),
+                    innerRadius: .ratio(0.3),
 
-                    angularInset: 2
+                    angularInset: 0.5,
                 )
                 .foregroundStyle(category.color)
+                
             }
             .frame(height: 250)
+            
+            if let selectedCategory {
+
+                VStack(spacing: 8) {
+
+                    Text(selectedCategory.name)
+                        .font(.headline)
+
+                    Text("₹\(Int(selectedCategory.amount))")
+                        .font(.title.bold())
+
+                    Text(
+                        "\(Int((selectedCategory.amount)/totalAmount * 100))% of expenses"
+                    )
+                    .foregroundStyle(.secondary)
+                }
+                .padding(.top)
+            }
 
             Divider()
 
@@ -43,6 +71,10 @@ struct ExpenseCategoryChart: View {
                 ForEach(categories) { category in
 
                     ExpenseCategoryRow(category: category)
+                        .onTapGesture {
+
+                            selectedCategory = category
+                        }
                 }
             }
         }

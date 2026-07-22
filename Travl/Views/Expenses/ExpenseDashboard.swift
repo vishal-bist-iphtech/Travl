@@ -5,38 +5,25 @@
 //  Created by iPHTech 34 on 21/07/26.
 //
 
-//
-//  ExpenseDashboardView.swift
-//  Travl
-//
-
 import SwiftUI
+import CoreData
 
 struct ExpenseDashboardView: View {
 
     @EnvironmentObject private var expenseViewModel: ExpenseViewModel
+    @EnvironmentObject private var tripViewModel: TripViewModel
 
     @State private var showAddExpense = false
 
-    // MARK: - Mock Data
+    private var currentTrip: TripEntity? {
 
-    private let budget: Double = 80000
-    private let spent: Double = 32750
-    private let currency = "₹"
+        tripViewModel.nextTrip
+    }
 
-    private let totalExpenses = 28
-    private let highestExpense = 12500
-    private let averageExpense = 1170
-    private let categoryCount = 6
+    private var currency: String {
 
-    private let categoryData: [ExpenseCategory] = [
-        ExpenseCategory(name: "Hotel", amount: 12500, color: .blue),
-        ExpenseCategory(name: "Food", amount: 7600, color: .orange),
-        ExpenseCategory(name: "Transport", amount: 4200, color: .green),
-        ExpenseCategory(name: "Shopping", amount: 5100, color: .purple),
-        ExpenseCategory(name: "Activities", amount: 2300, color: .pink),
-        ExpenseCategory(name: "Others", amount: 1050, color: .gray)
-    ]
+        currentTrip?.currency?.currencySymbol ?? "₹"
+    }
 
     var body: some View {
 
@@ -46,85 +33,120 @@ struct ExpenseDashboardView: View {
 
                 ScrollView {
 
-                    VStack(spacing: 20) {
+                    if let trip = currentTrip {
 
-                        BudgetSummaryCard(
-                            budget: budget,
-                            spent: spent,
-                            currency: currency
-                        )
+                        VStack(spacing: 20) {
 
-                        ExpenseStatsGrid(
-                            totalExpenses: totalExpenses,
-                            highestExpense: Double(highestExpense),
-                            averageExpense: Double(averageExpense),
-                            categories: categoryCount,
-                            currency: currency
-                        )
+                            BudgetSummaryCard(
 
-                        ExpenseCategoryChart(
-                            categories: categoryData
-                        )
+                                budget: trip.budget,
 
-                        // MARK: Recent Expenses
+                                bookingTotal: expenseViewModel.bookingTotal(for: trip),
 
-                        VStack(alignment: .leading, spacing: 16) {
+                                expenseTotal: expenseViewModel.totalExpenses(for: trip),
 
-                            HStack {
+                                totalSpent: expenseViewModel.totalSpent(for: trip),
 
-                                Text("Recent Expenses")
-                                    .font(.title3.bold())
+                                remaining: expenseViewModel.remainingBudget(for: trip),
 
-                                Spacer()
+                                currency: currency
+                            )
 
-                                Button("See All") {
+                            TripCostBreakdownCard(
 
-                                }
+                                bookingTotal: expenseViewModel.bookingTotal(for: trip),
+
+                                expenseTotal: expenseViewModel.totalExpenses(for: trip),
+
+                                currency: currency
+                            )
+
+                            ExpenseStatsGrid(
+
+                                totalBookings: expenseViewModel.bookingCount(for: trip),
+
+                                totalExpenses: expenseViewModel.expenseCount(for: trip),
+
+                                highestExpense: expenseViewModel.highestExpense(for: trip),
+
+                                averageExpense: expenseViewModel.averageExpense(for: trip),
+
+                                categories: expenseViewModel.categoryCount(for: trip),
+
+                                currency: currency
+                            )
+
+                            if !expenseViewModel.categoryBreakdown(for: trip).isEmpty {
+
+                                ExpenseCategoryChart(
+
+                                    categories: expenseViewModel.categoryBreakdown(for: trip)
+                                )
                             }
 
-                            ExpenseMockCard(
-                                icon: "bed.double.fill",
-                                title: "Hilton Hotel",
-                                category: "Hotel",
-                                amount: 12500,
-                                date: "Today"
-                            )
+                            VStack(alignment: .leading, spacing: 16) {
 
-                            ExpenseMockCard(
-                                icon: "fork.knife",
-                                title: "Dinner",
-                                category: "Food",
-                                amount: 1850,
-                                date: "Yesterday"
-                            )
+                                HStack {
 
-                            ExpenseMockCard(
-                                icon: "car.fill",
-                                title: "Uber Airport",
-                                category: "Transport",
-                                amount: 620,
-                                date: "20 Jul"
-                            )
+                                    Text("Recent Expenses")
+                                        .font(.title3.bold())
 
-                            ExpenseMockCard(
-                                icon: "bag.fill",
-                                title: "Shopping",
-                                category: "Shopping",
-                                amount: 3200,
-                                date: "19 Jul"
-                            )
+                                    Spacer()
 
-                            ExpenseMockCard(
-                                icon: "figure.hiking",
-                                title: "Scuba Diving",
-                                category: "Activity",
-                                amount: 4800,
-                                date: "18 Jul"
-                            )
+                                    if !expenseViewModel.recentExpenses(for: trip).isEmpty {
+
+                                        Button("See All") {
+
+                                        }
+                                    }
+                                }
+
+                                if expenseViewModel.recentExpenses(for: trip).isEmpty {
+
+                                    ContentUnavailableView(
+
+                                        "No Expenses",
+
+                                        systemImage: "dollarsign.circle",
+
+                                        description: Text("Add your first expense to start tracking.")
+                                    )
+
+                                } else {
+
+                                    ForEach(
+
+                                        expenseViewModel.recentExpenses(for: trip),
+
+                                        id: \.objectID
+
+                                    ) { expense in
+
+                                        ExpenseCard(
+
+                                            expense: expense,
+
+                                            currency: currency
+                                        )
+                                    }
+                                }
+                            }
                         }
+                        .padding()
+                        .padding(.bottom, 90)
+
+                    } else {
+
+                        ContentUnavailableView(
+
+                            "No Upcoming Trip",
+
+                            systemImage: "airplane",
+
+                            description: Text("Create a trip to start tracking expenses.")
+                        )
+                        .padding()
                     }
-                    .padding()
-                    .padding(.bottom, 90)
                 }
 
                 Button {
@@ -143,12 +165,19 @@ struct ExpenseDashboardView: View {
                 }
                 .padding()
             }
+            
             .navigationTitle("Expenses")
+            .navigationTitle("Expenses")
+            .onAppear {
+
+                tripViewModel.refresh()
+                expenseViewModel.refresh()
+            }
             .sheet(isPresented: $showAddExpense) {
 
                 NavigationStack {
 
-                    AddExpenseView(trip: nil)
+                    AddExpenseView(trip: currentTrip)
                 }
                 .environmentObject(expenseViewModel)
             }
@@ -156,58 +185,9 @@ struct ExpenseDashboardView: View {
     }
 }
 
-// MARK: - Mock Expense Card
-
-private struct ExpenseMockCard: View {
-
-    let icon: String
-    let title: String
-    let category: String
-    let amount: Double
-    let date: String
-
-    var body: some View {
-
-        HStack(spacing: 16) {
-
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(.blue)
-                .frame(width: 50, height: 50)
-                .background(.blue.opacity(0.12))
-                .clipShape(Circle())
-
-            VStack(alignment: .leading, spacing: 4) {
-
-                Text(title)
-                    .font(.headline)
-
-                Text(category)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-
-                Text("₹\(Int(amount))")
-                    .fontWeight(.semibold)
-
-                Text(date)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .shadow(color: .black.opacity(0.08), radius: 4)
-    }
-}
-
 #Preview {
 
     ExpenseDashboardView()
         .environmentObject(ExpenseViewModel())
+        .environmentObject(TripViewModel())
 }

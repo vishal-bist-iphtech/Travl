@@ -23,8 +23,7 @@ struct RecentExpenseSection: View {
                 Spacer()
 
                 NavigationLink("See All") {
-
-                    ExpensesView(trip: nil)
+                    ExpensesView()
                 }
             }
 
@@ -32,26 +31,26 @@ struct RecentExpenseSection: View {
 
                 ContentUnavailableView(
                     "No Expenses",
-                    systemImage: "indianrupeesign.circle",
-                    description: Text("Start tracking your travel expenses.")
+                    systemImage: "creditcard",
+                    description: Text("Start tracking your trip expenses.")
                 )
 
             } else {
 
-                ForEach(
-                    expenseViewModel.expenses.prefix(5),
-                    id: \.objectID
-                ) { expense in
+                VStack(spacing: 12) {
 
-                    NavigationLink {
+                    ForEach(expenseViewModel.expenses.prefix(5), id: \.objectID) { expense in
 
-                        ExpenseDetailView(expense: expense)
+                        NavigationLink {
 
-                    } label: {
+                            ExpenseDetailView(expense: expense)
 
-                        ExpenseCard(expense: expense)
+                        } label: {
+
+                            ExpenseRow(expense: expense)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
             }
         }
@@ -63,7 +62,6 @@ struct RecentExpenseSection: View {
     NavigationStack {
 
         RecentExpenseSection()
-            .padding()
             .environmentObject(ExpenseViewModel())
     }
 }

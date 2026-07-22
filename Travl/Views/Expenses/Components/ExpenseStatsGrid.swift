@@ -14,6 +14,7 @@ import SwiftUI
 
 struct ExpenseStatsGrid: View {
 
+    let totalBookings: Int
     let totalExpenses: Int
     let highestExpense: Double
     let averageExpense: Double
@@ -21,7 +22,6 @@ struct ExpenseStatsGrid: View {
     let currency: String
 
     private let columns = [
-
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
@@ -30,45 +30,85 @@ struct ExpenseStatsGrid: View {
 
         LazyVGrid(columns: columns, spacing: 16) {
 
-            ExpenseStatCard(
-                title: "Expenses",
-                value: "\(totalExpenses)",
-                systemImage: "list.bullet.rectangle.fill",
+            StatCard(
+                title: "Bookings",
+                value: "\(totalBookings)",
+                icon: "airplane",
                 color: .blue
             )
 
-            ExpenseStatCard(
+            StatCard(
+                title: "Expenses",
+                value: "\(totalExpenses)",
+                icon: "creditcard.fill",
+                color: .orange
+            )
+
+            StatCard(
                 title: "Highest",
                 value: "\(currency) \(Int(highestExpense))",
-                systemImage: "arrow.up.circle.fill",
+                icon: "arrow.up.circle.fill",
                 color: .red
             )
 
-            ExpenseStatCard(
+            StatCard(
                 title: "Average",
                 value: "\(currency) \(Int(averageExpense))",
-                systemImage: "chart.bar.fill",
+                icon: "chart.bar.fill",
                 color: .green
             )
 
-            ExpenseStatCard(
+            StatCard(
                 title: "Categories",
                 value: "\(categories)",
-                systemImage: "square.grid.2x2.fill",
-                color: .orange
+                icon: "square.grid.2x2.fill",
+                color: .purple
             )
         }
+    }
+}
+
+private struct StatCard: View {
+
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+
+    var body: some View {
+
+        VStack(alignment: .leading, spacing: 12) {
+
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundStyle(color)
+
+            Spacer()
+
+            Text(value)
+                .font(.title2.bold())
+
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, minHeight: 110)
+        .padding()
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow(color: .black.opacity(0.08), radius: 6)
     }
 }
 
 #Preview {
 
     ExpenseStatsGrid(
-        totalExpenses: 26,
-        highestExpense: 6500,
-        averageExpense: 1200,
+        totalBookings: 5,
+        totalExpenses: 18,
+        highestExpense: 8500,
+        averageExpense: 1450,
         categories: 6,
-        currency: "₹"
+        currency: "INR"
     )
     .padding()
 }

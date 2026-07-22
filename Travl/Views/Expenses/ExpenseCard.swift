@@ -9,89 +9,59 @@ import SwiftUI
 import CoreData
 
 struct ExpenseCard: View {
-
-    @ObservedObject var expense: ExpenseEntity
-
-    private var categoryIcon: String {
-
+    
+    let expense: ExpenseEntity
+    let currency: String
+    
+    private var icon: String {
         switch expense.category {
-
-        case "Food":
-            return "fork.knife"
-
-        case "Transport":
-            return "car.fill"
-
-        case "Hotel":
-            return "bed.double.fill"
-
-        case "Shopping":
-            return "bag.fill"
-
-        case "Activity":
-            return "ticket.fill"
-
-        case "Flight":
-            return "airplane"
-
-        default:
-            return "indianrupeesign.circle.fill"
+        case "Hotel": return "bed.double.fill"
+        case "Food": return "fork.knife"
+        case "Transport": return "car.fill"
+        case "Shopping": return "bag.fill"
+        case "Activities": return "figure.hiking"
+        case "Entertainment": return "tv.fill"
+        default: return "dollarsign.circle"
         }
     }
-
+    
     var body: some View {
-
-        VStack(alignment: .leading, spacing: 16) {
-
-            HStack {
-
-                Image(systemName: categoryIcon)
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                    .frame(width: 50, height: 50)
-                    .background(.blue)
-                    .clipShape(Circle())
-
-                VStack(alignment: .leading) {
-
-                    Text(expense.title ?? "")
-                        .font(.headline)
-
-                    Text(expense.category ?? "")
-                        .font(.subheadline)
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundStyle(.blue)
+                .frame(width: 50, height: 50)
+                .background(.blue.opacity(0.12))
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(expense.title ?? "Untitled")
+                    .font(.headline)
+                
+                if let category = expense.category {
+                    Text(category)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-
-                Spacer()
-
-                Text("\(expense.currency ?? "") \(Int(expense.amount))")
-                    .font(.headline)
-                    .foregroundStyle(.red)
             }
-
-            Divider()
-
-            HStack {
-
-                Label(
-                    expense.date?.formatted(date: .abbreviated,
-                                            time: .omitted) ?? "",
-                    systemImage: "calendar"
-                )
-
-                Spacer()
-
-                Text(expense.paymentMethod ?? "")
-                    .foregroundStyle(.secondary)
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("\(currency)\(Int(expense.amount))")
+                    .fontWeight(.semibold)
+                
+                if let date = expense.date {
+                    Text(date.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
-            .font(.caption)
         }
         .padding()
-        .background(.background)
+        .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .shadow(color: .black.opacity(0.08),
-                radius: 6,
-                y: 2)
+        .shadow(color: .black.opacity(0.08), radius: 4)
     }
 }
 
@@ -114,6 +84,6 @@ struct ExpenseCard: View {
 
     expense.date = .now
 
-    return ExpenseCard(expense: expense)
+    return ExpenseCard(expense: expense, currency: "INR")
         .padding()
 }
