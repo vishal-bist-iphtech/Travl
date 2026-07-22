@@ -15,4 +15,5 @@ struct ExpenseCategory: Identifiable {
     let amount: Double
 
     let color: Color
+    
 }
