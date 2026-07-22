@@ -347,4 +347,27 @@ final class CoreDataService {
         saveContext()
     }
     
+    
+// -------------->      MARK: Packings Functions
+    
+
+//    func fetchPackingItems() -> [PackingItemEntity] {
+//
+//        let request = PackingItemEntity.fetchRequest()
+//
+//        request.sortDescriptors = [
+//            NSSortDescriptor(keyPath: \PackingItemEntity.isPacked, ascending: true)
+//        ]
+//
+//        do {
+//
+//            return try context.fetch(request)
+//
+//        } catch {
+//
+//            print(error.localizedDescription)
+//            return []
+//        }
+//    }
+//    
 }
