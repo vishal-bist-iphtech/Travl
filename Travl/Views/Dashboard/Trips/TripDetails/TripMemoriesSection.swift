@@ -91,9 +91,6 @@ struct TripMemoriesSection: View {
 
             }
         }
-        .onAppear {
-            print("Memories:", trip.memories?.count ?? 0)
-        }
         .confirmationDialog(
             "Add Memory",
             isPresented: $showMemoryOptions,

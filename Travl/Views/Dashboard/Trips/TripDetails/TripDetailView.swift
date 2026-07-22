@@ -79,7 +79,7 @@ struct TripDetailView: View {
 
 #Preview {
 
-    let context = PersistenceController.shared.container.viewContext
+    let context = PersistenceController.preview.container.viewContext
 
     @ObservedObject var trip = TripEntity(context: context)
 
@@ -93,14 +93,9 @@ struct TripDetailView: View {
     trip.endDate = Calendar.current.date(byAdding: .day, value: 5, to: Date())
 
     return NavigationStack {
-
-        TripDetailView(
-            trip: trip
-        )
-    }
-    .environmentObject(
-        TripViewModel()
-    )
-    .environmentObject(MemoryViewModel())
-    .environmentObject(BookingViewModel())
+        TripDetailView(trip: trip)
+        }
+        .environmentObject(TripViewModel())
+        .environmentObject(MemoryViewModel())
+        .environmentObject(BookingViewModel())
 }

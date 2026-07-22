@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TripBookingsSection: View {
 
@@ -44,7 +45,7 @@ struct TripBookingsSection: View {
                 
                 Spacer()
                 
-                if bookings.count > 3 {
+                if bookings.count >= 3 {
                     
                     NavigationLink("See All") {
                         
@@ -72,7 +73,11 @@ struct TripBookingsSection: View {
                 
                 TabView {
                     ForEach(bookings.prefix(3), id: \.objectID) { booking in
-                        BookingCard(booking: booking)
+                        NavigationLink {
+                            BookingDetailView(booking: booking)
+                        } label: {
+                            BookingCard(booking: booking)
+                        }
                     }
                 }
                 .tabViewStyle(.page)
@@ -112,4 +117,34 @@ struct TripBookingsSection: View {
         }
         .padding()
     }
+}
+
+#Preview {
+    let context = PersistenceController.preview.container.viewContext
+    
+    let trip = TripEntity(context: context)
+    
+    
+    trip.destination = "Paris"
+    trip.startDate = Date()
+    trip.endDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())
+    
+    let booking = BookingEntity(context: context)
+    
+    booking.bookingType = "Hotel"
+    booking.currency = "INR"
+    booking.amount = 100000
+    booking.status = "Pending"
+    booking.startDate = Date()
+    booking.endDate = Calendar.current.date(byAdding: .day, value: 5, to: Date())
+    booking.bookingReference = "123456789"
+    booking.provider = "Booking.com"
+    booking.title = "Hotel"
+    booking.notes = "Some notes"
+    booking.trip = trip
+    
+    return NavigationStack{
+        TripBookingsSection(trip: trip)
+    }
+    .environmentObject(BookingViewModel())
 }

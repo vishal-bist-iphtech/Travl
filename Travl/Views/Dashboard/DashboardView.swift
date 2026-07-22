@@ -67,24 +67,17 @@ struct DashboardView: View {
                         daysRemaining:daysRemaining
                     )
                     
-                    HStack(spacing: 16) {
-                        BudgetCard(
-                            totalBudget: totalBudget
+                    VStack{
+                        TripCarousel(
+                            trips: tripViewModel.trips
                         )
-                        DaysCard(
-                            daysRemaining: daysRemaining
+                        
+                        MemoryCarousel(
+                            memories: memoryViewModel.memories,
+                            trip: nil
                         )
                     }
-                    
-                    PackingProgressCard()
-                    
-                    TripCarousel(
-                        trips: tripViewModel.trips
-                    )
-                    MemoryCarousel(
-                        memories: memoryViewModel.memories,
-                        trip: nil
-                    )
+                    .background(Color(.secondarySystemBackground))
                 }
                 .padding()
             }
