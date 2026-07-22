@@ -111,7 +111,7 @@ struct BookingCard: View {
 
 #Preview {
     
-    let context = PersistenceController.shared.container.viewContext
+    let context = PersistenceController.preview.container.viewContext
     
     let booking = BookingEntity(context: context)
     
@@ -126,8 +126,6 @@ struct BookingCard: View {
     booking.endDate = Calendar.current.date(byAdding: .day, value: 5, to: Date())
     booking.currency = "INR"
     
-    return BookingCard(
-        booking: booking
-    )
+    return BookingCard(booking: booking)
     .padding()
 }

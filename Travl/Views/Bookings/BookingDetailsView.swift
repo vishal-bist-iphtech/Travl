@@ -132,8 +132,11 @@ struct BookingDetailView: View {
         .alert("Delete Booking?", isPresented: $showDeleteAlert) {
 
             Button("Delete", role: .destructive) {
-
-                bookingViewModel.deleteBooking(booking)
+                if booking.trip != nil {
+                    booking.trip = nil
+                } else {
+                    bookingViewModel.deleteBooking(booking)
+                }
 
                 dismiss()
             }
