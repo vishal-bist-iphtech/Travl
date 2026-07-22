@@ -37,6 +37,15 @@
         <attribute name="title" attributeType="String"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="memories" inverseEntity="TripEntity"/>
     </entity>
+    <entity name="PackingItemEntity" representedClassName="PackingItemEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="category" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isPacked" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="packings" inverseEntity="TripEntity"/>
+    </entity>
     <entity name="TripEntity" representedClassName="TripEntity" syncable="YES" codeGenerationType="class">
         <attribute name="budget" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="city" attributeType="String"/>
@@ -50,5 +59,6 @@
         <relationship name="bookings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BookingEntity" inverseName="trip" inverseEntity="BookingEntity"/>
         <relationship name="expenses" toMany="YES" deletionRule="Nullify" destinationEntity="ExpenseEntity" inverseName="trip" inverseEntity="ExpenseEntity"/>
         <relationship name="memories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MemoryEntity" inverseName="trip" inverseEntity="MemoryEntity"/>
+        <relationship name="packings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PackingItemEntity" inverseName="trip" inverseEntity="PackingItemEntity"/>
     </entity>
 </model>
