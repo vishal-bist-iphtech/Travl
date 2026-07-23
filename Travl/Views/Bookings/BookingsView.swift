@@ -52,7 +52,7 @@ struct BookingsView: View {
 
                 } else {
 
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
 
                         LazyVStack(spacing: 16) {
 

@@ -1,5 +1,5 @@
 //
-//  BookingDetailsView.swift
+//  BookingDetailView.swift
 //  Travl
 //
 //  Created by iPHTech 34 on 20/07/26.
