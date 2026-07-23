@@ -97,3 +97,7 @@ Core Data
 ```
 
 This separation keeps UI, business logic, and data persistence independent and easier to maintain.
+
+# Demo Video
+
+<video src="https://github.com/user-attachments/assets/29df5178-a2db-4a5e-89b3-b42b122fa568" controls autoplay></video>
