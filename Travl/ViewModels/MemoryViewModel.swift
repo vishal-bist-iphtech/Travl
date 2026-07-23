@@ -69,7 +69,7 @@ final class MemoryViewModel: ObservableObject {
     ) {
 
         coreDataService.deleteMemory(memory)
-
+        
         refresh()
     }
     

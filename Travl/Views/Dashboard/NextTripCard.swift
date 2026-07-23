@@ -58,7 +58,7 @@ struct NextTripCard: View {
                 Spacer()
                 
                 Text(
-                    trip?.destination ?? "No Upcoming Trips"
+                    trip?.title ?? "No Upcoming Trips"
                 )
                     .font(.title)
                     .bold()
@@ -103,7 +103,7 @@ struct NextTripCard: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Goa"
+    trip.title = "Goa"
 
     trip.city = "Goa"
 

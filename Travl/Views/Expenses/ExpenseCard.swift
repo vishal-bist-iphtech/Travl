@@ -37,6 +37,7 @@ struct ExpenseCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(expense.title ?? "Untitled")
                     .font(.headline)
+                    .background(.clear)
                 
                 if let category = expense.category {
                     Text(category)

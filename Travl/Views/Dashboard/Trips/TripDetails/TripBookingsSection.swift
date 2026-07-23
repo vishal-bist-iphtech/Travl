@@ -125,7 +125,7 @@ struct TripBookingsSection: View {
     let trip = TripEntity(context: context)
     
     
-    trip.destination = "Paris"
+    trip.title = "Paris"
     trip.startDate = Date()
     trip.endDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())
     

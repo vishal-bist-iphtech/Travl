@@ -81,7 +81,7 @@ struct SelectBookingView: View {
     let context = PersistenceController.preview.container.viewContext
 
     let trip = TripEntity(context: context)
-    trip.destination = "Goa"
+    trip.title = "Goa"
 
     let booking = BookingEntity(context: context)
     booking.title = "Hotel Booking"

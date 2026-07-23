@@ -20,7 +20,7 @@ struct TestView: View {
                 Button("Add Sample Trip") {
 
                     tripViewModel.addTrip(
-                        destination: "Paris",
+                        title: "Paris",
                         country: "France",
                         city: "Paris",
                         startDate: Date(),
@@ -39,7 +39,7 @@ struct TestView: View {
 
                         VStack(alignment: .leading, spacing: 5) {
 
-                            Text(trip.destination ?? "Unknown")
+                            Text(trip.title ?? "Unknown")
                                 .font(.headline)
 
                             Text("\(trip.city ?? ""), \(trip.country ?? "")")

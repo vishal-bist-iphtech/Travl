@@ -142,6 +142,12 @@ struct MemoryDetailView: View {
                 
                 if memory.trip != nil {
                     memory.trip = nil
+                    
+                    CoreDataService.shared.saveContext()
+
+                    memoryViewModel.refresh()
+                    
+                    print("trip -\\-> memory \n\(memory.trip)")
                 }
                 else {
                     memoryViewModel.deleteMemory(memory)
@@ -166,7 +172,7 @@ struct MemoryDetailView: View {
     let context = PersistenceController.shared.container.viewContext
 
     let trip = TripEntity(context: context)
-    trip.destination = "Goa"
+    trip.title = "Goa"
     trip.country = "India"
 
     let memory = MemoryEntity(context: context)

@@ -10,7 +10,7 @@ import CoreData
 
 struct TripCard: View {
     
-    let trip: TripEntity
+    @ObservedObject var trip: TripEntity
 
     var body: some View {
 
@@ -21,7 +21,7 @@ struct TripCard: View {
 
                         VStack(alignment: .leading, spacing: 4) {
 
-                            Text(trip.destination ?? "Unknown Destination")
+                            Text(trip.title ?? "Unknown Destination")
                                 .font(.title3)
                                 .fontWeight(.bold)
 
@@ -109,7 +109,7 @@ struct TripCard: View {
 
         let trip = TripEntity(context: context)
 
-        trip.destination = "Paris"
+        trip.title = "Paris"
         trip.city = "Paris"
         trip.country = "France"
         trip.currency = "INR"

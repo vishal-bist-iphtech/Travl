@@ -15,7 +15,7 @@ struct EditTripView: View {
 
     let trip: TripEntity
 
-    @State private var destination: String
+    @State private var title: String
     @State private var country: String
     @State private var city: String
     @State private var startDate: Date
@@ -30,7 +30,7 @@ struct EditTripView: View {
 
         self.trip = trip
 
-        _destination = State(initialValue: trip.destination ?? "")
+        _title = State(initialValue: trip.title ?? "")
         _country = State(initialValue: trip.country ?? "")
         _city = State(initialValue: trip.city ?? "")
         _startDate = State(initialValue: trip.startDate ?? Date())
@@ -44,9 +44,9 @@ struct EditTripView: View {
 
         Form {
 
-            Section("Destination") {
+            Section("Title") {
 
-                TextField("Title", text: $destination)
+                TextField("Title", text: $title)
                 TextField("City", text: $city)
                 TextField("Country", text: $country)
                 
@@ -119,24 +119,14 @@ struct EditTripView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
-                    
-                    guard
-                        !destination.isEmpty,
-                        !country.isEmpty,
-                        !city.isEmpty,
-                        let budgetValue = Double(budget)
-                    else {
-                        return
-                    }
-
                     tripViewModel.updateTrip(
                         trip: trip,
-                        destination: destination,
+                        title: title,
                         country: country,
                         city: city,
                         startDate: startDate,
                         endDate: endDate,
-                        budget: budgetValue,
+                        budget: Double(budget) ?? 0,
                         currency: selectedCurrency,
                         status: selectedStatus
                     )
@@ -144,6 +134,7 @@ struct EditTripView: View {
                     dismiss()
                     
                 }
+                .disabled(title.isEmpty || country.isEmpty || city.isEmpty || budget.isEmpty)
                 
             }
         }
@@ -157,7 +148,7 @@ struct EditTripView: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Big Ben"
+    trip.title = "Big Ben"
     trip.country = "France"
     trip.city = "Paris"
     trip.budget = 120000

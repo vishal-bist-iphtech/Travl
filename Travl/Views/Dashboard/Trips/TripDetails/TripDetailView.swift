@@ -83,7 +83,7 @@ struct TripDetailView: View {
 
     @ObservedObject var trip = TripEntity(context: context)
 
-    trip.destination = "Paris"
+    trip.title = "Paris"
     trip.city = "Paris"
     trip.country = "France"
     trip.currency = "INR"

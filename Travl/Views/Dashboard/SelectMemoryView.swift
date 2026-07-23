@@ -81,7 +81,7 @@ struct SelectMemoryView: View {
     let context = PersistenceController.preview.container.viewContext
 
     let trip = TripEntity(context: context)
-    trip.destination = "Goa"
+    trip.title = "Goa"
 
     let memory = MemoryEntity(context: context)
     memory.title = "Sunset"

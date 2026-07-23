@@ -20,6 +20,33 @@ final class ExpenseViewModel: ObservableObject {
     init() {
         loadExpenses()
     }
+    
+    let currencies = [
+        "INR",
+        "USD",
+        "EUR",
+        "JPY",
+        "GBP",
+    ]
+    
+    let categories = [
+        "Food",
+        "Transport",
+        "Hotel",
+        "Flight",
+        "Shopping",
+        "Activity",
+        "Other"
+    ]
+
+    let paymentMethods = [
+        "Cash",
+        "Credit Card",
+        "Debit Card",
+        "UPI",
+        "Wallet"
+    ]
+
 
     func loadExpenses() {
         expenses = coreDataService.fetchExpenses()

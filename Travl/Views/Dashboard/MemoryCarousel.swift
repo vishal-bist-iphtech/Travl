@@ -24,7 +24,7 @@ struct MemoryCarousel: View {
 
             HStack {
 
-                Text("Recent Memories")
+                Text("All Memories")
                     .font(.title2.bold())
 
                 Spacer()

@@ -77,23 +77,30 @@ struct AddBookingView: View {
 
                 Section("Payment") {
 
-                    TextField(
-                        "Amount",
-                        text: $amount
-                    )
-                    .keyboardType(.decimalPad)
-
-                    Picker(
-                        "Currency",
-                        selection: $currency
-                    ) {
-
-                        ForEach(
-                            bookingViewModel.currencies,
-                            id: \.self
-                        ) {
-                            Text($0)
-                        }
+                    HStack(spacing: 10){
+                        
+                        
+                       Menu {
+                            
+                            ForEach(bookingViewModel.currencies, id: \.self) { cur in
+                                Button(cur) {
+                                    currency = cur
+                                }
+                            }
+                       } label: {
+                           HStack(spacing: 4) {
+                               Text((currency))
+                               Image(systemName: "chevron.down")
+                                   .font(.caption2)
+                           }
+                           .frame(width: 60)
+                       }
+                        Divider()
+                            .background(Color.primary)
+                        TextField("Amount", text: $amount)
+                            .keyboardType(.decimalPad)
+                            .font(.system(size: 18))
+                            .padding(.horizontal)
                     }
                 }
 

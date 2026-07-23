@@ -98,7 +98,7 @@ struct BookingsView: View {
         .navigationTitle(
             trip == nil
             ? "Bookings"
-            : "\(trip?.destination ?? "") Bookings"
+            : "\(trip?.title ?? "") Bookings"
         )
         .sheet(isPresented: $showAddBooking) {
 

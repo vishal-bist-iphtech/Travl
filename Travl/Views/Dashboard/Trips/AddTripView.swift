@@ -13,7 +13,7 @@ struct AddTripView: View {
     
     @EnvironmentObject private var tripViewModel: TripViewModel
     
-    @State private var destination = ""
+    @State private var title = ""
     @State private var country = ""
     @State private var city = ""
     @State private var startDate = Date()
@@ -28,9 +28,9 @@ struct AddTripView: View {
             
             Form {
                 
-                Section("Destination") {
+                Section("Title") {
                     
-                    TextField("Title", text: $destination)
+                    TextField("Title", text: $title)
                     TextField("City", text: $city)
                     TextField("State or Country", text: $country)
                     
@@ -70,7 +70,7 @@ struct AddTripView: View {
                                Image(systemName: "chevron.down")
                                    .font(.caption2)
                            }
-                           .frame(width: 50)
+                           .frame(width: 60)
                        }
                         Divider()
                             .background(Color.primary)
@@ -102,12 +102,12 @@ struct AddTripView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         
-                        guard !destination.isEmpty,!country.isEmpty,!city.isEmpty,
+                        guard !title.isEmpty,!country.isEmpty,!city.isEmpty,
                               let budgetValue = Double(budget)
                         else { return }
                         
                         tripViewModel.addTrip(
-                            destination: destination,
+                            title: title,
                             country: country,
                             city: city,
                             startDate: startDate,
@@ -120,7 +120,7 @@ struct AddTripView: View {
                         dismiss()
                     }
                     .disabled(
-                        destination.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     )
                 }
             }

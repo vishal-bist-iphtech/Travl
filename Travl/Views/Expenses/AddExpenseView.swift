@@ -23,24 +23,7 @@ struct AddExpenseView: View {
     @State private var date = Date()
     @State private var notes = ""
 
-    private let categories = [
-        "Food",
-        "Transport",
-        "Hotel",
-        "Flight",
-        "Shopping",
-        "Activity",
-        "Other"
-    ]
-
-    private let paymentMethods = [
-        "Cash",
-        "Credit Card",
-        "Debit Card",
-        "UPI",
-        "Wallet"
-    ]
-
+  
     var body: some View {
 
         NavigationStack {
@@ -51,28 +34,44 @@ struct AddExpenseView: View {
 
                     TextField("Title", text: $title)
 
-                    TextField("Amount", text: $amount)
-                        .keyboardType(.decimalPad)
+                    HStack(spacing: 10){
+                        
+                        
+                       Menu {
+                            
+                            ForEach(expenseViewModel.currencies, id: \.self) { cur in
+                                Button(cur) {
+                                    selectedCurrency = cur
+                                }
+                            }
+                       } label: {
+                           HStack(spacing: 4) {
+                               Text((selectedCurrency))
+                               Image(systemName: "chevron.down")
+                                   .font(.caption2)
+                           }
+                           .frame(width: 60)
+                       }
+                        Divider()
+                            .background(Color.primary)
+                        TextField("Amount", text: $amount)
+                            .keyboardType(.decimalPad)
+                            .font(.system(size: 18))
+                            .padding(.horizontal)
+                    }
 
                     Picker("Category", selection: $selectedCategory) {
 
-                        ForEach(categories, id: \.self) {
+                        ForEach(expenseViewModel.categories, id: \.self) {
                             Text($0)
                         }
                     }
 
-                    Picker("Currency", selection: $selectedCurrency) {
-
-                        Text("INR").tag("INR")
-                        Text("USD").tag("USD")
-                        Text("EUR").tag("EUR")
-                        Text("GBP").tag("GBP")
-                    }
 
                     Picker("Payment Method",
                            selection: $selectedPaymentMethod) {
 
-                        ForEach(paymentMethods,
+                        ForEach(expenseViewModel.paymentMethods,
                                 id: \.self) {
 
                             Text($0)
@@ -136,7 +135,7 @@ struct AddExpenseView: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Goa"
+    trip.title = "Goa"
 
     return AddExpenseView(trip: trip)
         .environmentObject(ExpenseViewModel())

@@ -51,14 +51,14 @@
         <attribute name="city" attributeType="String"/>
         <attribute name="country" attributeType="String"/>
         <attribute name="currency" attributeType="String"/>
-        <attribute name="destination" attributeType="String"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="status" attributeType="String"/>
-        <relationship name="bookings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BookingEntity" inverseName="trip" inverseEntity="BookingEntity"/>
-        <relationship name="expenses" toMany="YES" deletionRule="Nullify" destinationEntity="ExpenseEntity" inverseName="trip" inverseEntity="ExpenseEntity"/>
-        <relationship name="memories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MemoryEntity" inverseName="trip" inverseEntity="MemoryEntity"/>
-        <relationship name="packings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PackingItemEntity" inverseName="trip" inverseEntity="PackingItemEntity"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <relationship name="bookings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BookingEntity" inverseName="trip" inverseEntity="BookingEntity"/>
+        <relationship name="expenses" toMany="YES" deletionRule="Cascade" destinationEntity="ExpenseEntity" inverseName="trip" inverseEntity="ExpenseEntity"/>
+        <relationship name="memories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MemoryEntity" inverseName="trip" inverseEntity="MemoryEntity"/>
+        <relationship name="packings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PackingItemEntity" inverseName="trip" inverseEntity="PackingItemEntity"/>
     </entity>
 </model>

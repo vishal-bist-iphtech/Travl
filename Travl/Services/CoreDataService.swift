@@ -35,13 +35,26 @@ final class CoreDataService {
     }
     
     func saveContext() {
-        
-        guard context.hasChanges else {return}
-        
+
+        guard context.hasChanges else { return }
+
         do {
+
             try context.save()
-        } catch {
-            print("Core Data Save Error: \n\(error.localizedDescription)")
+
+        } catch let error as NSError {
+
+            print("CoreData Save Error:", error)
+
+            if let detailedErrors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+
+                for detailedError in detailedErrors {
+
+                    print("-------------------------")
+                    print("Description:", detailedError.localizedDescription)
+                    print("UserInfo:", detailedError.userInfo)
+                }
+            }
         }
     }
     
@@ -50,7 +63,7 @@ final class CoreDataService {
     
     
     func addTrip(
-        destination: String,
+        title: String,
         country: String,
         city: String,
         startDate: Date,
@@ -63,7 +76,7 @@ final class CoreDataService {
         let trip = TripEntity(context: context)
         
         trip.id = UUID()
-        trip.destination = destination
+        trip.title = title
         trip.country = country
         trip.city = city
         trip.startDate = startDate
@@ -94,13 +107,14 @@ final class CoreDataService {
     func deleteTrip(_ trip: TripEntity) {
         
         context.delete(trip)
-        
+        print("Trip Deletion: \(trip.isDeleted)")
         saveContext()
+        
     }
     
     func updateTrip(
         trip: TripEntity,
-        destination: String,
+        title: String,
         country: String,
         city: String,
         startDate: Date,
@@ -110,7 +124,7 @@ final class CoreDataService {
         status: String
     ) {
 
-        trip.destination = destination
+        trip.title = title
         trip.country = country
         trip.city = city
         trip.startDate = startDate
@@ -161,11 +175,11 @@ final class CoreDataService {
         memory.imageData = imageData
         memory.rating = rating
         memory.date = date
-        print("Trip parameter:", trip?.destination ?? "nil")
+        print("Trip parameter:", trip?.title ?? "nil")
         
         memory.trip = trip
 
-        print("Assigned trip:", memory.trip?.destination ?? "nil")
+        print("Assigned trip:", memory.trip?.title ?? "nil")
 
         saveContext()
 
@@ -178,7 +192,8 @@ final class CoreDataService {
     func deleteMemory(_ memory: MemoryEntity) {
 
         context.delete(memory)
-
+        print("Memory Deletion: \(memory.isDeleted)")
+        
         saveContext()
     }
     
@@ -351,23 +366,23 @@ final class CoreDataService {
 // -------------->      MARK: Packings Functions
     
 
-//    func fetchPackingItems() -> [PackingItemEntity] {
-//
-//        let request = PackingItemEntity.fetchRequest()
-//
-//        request.sortDescriptors = [
-//            NSSortDescriptor(keyPath: \PackingItemEntity.isPacked, ascending: true)
-//        ]
-//
-//        do {
-//
-//            return try context.fetch(request)
-//
-//        } catch {
-//
-//            print(error.localizedDescription)
-//            return []
-//        }
-//    }
-//    
+    func fetchPackingItems() -> [PackingItemEntity] {
+
+        let request = PackingItemEntity.fetchRequest()
+
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \PackingItemEntity.isPacked, ascending: true)
+        ]
+
+        do {
+
+            return try context.fetch(request)
+
+        } catch {
+
+            print(error.localizedDescription)
+            return []
+        }
+    }
+    
 }

@@ -37,40 +37,103 @@ struct EditExpenseView: View {
     }
 
     var body: some View {
-
+        
         NavigationStack {
-
-            ExpenseForm(
-                title: $title,
-                amount: $amount,
-                category: $category,
-                paymentMethod: $paymentMethod,
-                currency: $currency,
-                date: $date,
-                notes: $notes
-            )
-            .navigationTitle("Edit Expense")
+            
+            Form {
+                
+                Section("Expense Details") {
+                    
+                    TextField("Title", text: $title)
+                    
+                    HStack(spacing: 10){
+                        
+                        
+                        Menu {
+                            
+                            ForEach(expenseViewModel.currencies, id: \.self) { cur in
+                                Button(cur) {
+                                    currency = cur
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text((currency))
+                                Image(systemName: "chevron.down")
+                                    .font(.caption2)
+                            }
+                            .frame(width: 60)
+                        }
+                        Divider()
+                            .background(Color.primary)
+                        TextField("Amount", text: $amount)
+                            .keyboardType(.decimalPad)
+                            .font(.system(size: 18))
+                            .padding(.horizontal)
+                    }
+                    
+                    Picker("Category", selection: $category) {
+                        
+                        ForEach(expenseViewModel.categories, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    
+                    
+                    Picker("Payment Method",
+                           selection: $paymentMethod) {
+                        
+                        ForEach(expenseViewModel.paymentMethods,
+                                id: \.self) {
+                            
+                            Text($0)
+                        }
+                    }
+                    
+                    DatePicker(
+                        "Date",
+                        selection: $date,
+                        displayedComponents: .date
+                    )
+                }
+                
+                Section("Notes") {
+                    
+                    TextEditor(text: $notes)
+                        .frame(minHeight: 120)
+                }
+            }
+            .navigationTitle("Add Expense")
             .navigationBarTitleDisplayMode(.inline)
+            
             .toolbar {
-
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    
+                    Button("Cancel") {
+                        
+                        dismiss()
+                    }
+                }
+                
                 ToolbarItem(placement: .topBarTrailing) {
-
+                    
                     Button("Save") {
-
-                        expenseViewModel.updateExpense(
-                            expense: expense,
+                        
+                        expenseViewModel.addExpense(
                             title: title,
                             amount: Double(amount) ?? 0,
                             category: category,
                             date: date,
                             notes: notes,
                             paymentMethod: paymentMethod,
-                            currency: currency
+                            currency: currency,
+                            trip: nil
                         )
-
+                        
                         dismiss()
                     }
-                    .fontWeight(.semibold)
+                    .disabled(title.isEmpty || amount.isEmpty)
                 }
             }
         }

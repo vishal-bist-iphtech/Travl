@@ -173,6 +173,6 @@ final class BookingViewModel: ObservableObject {
                return .gray
            }
        }
-    
+  
    
 }

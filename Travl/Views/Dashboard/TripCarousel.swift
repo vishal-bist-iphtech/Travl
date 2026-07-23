@@ -10,7 +10,7 @@ import CoreData
 
 struct TripCarousel: View {
     
-    let trips: [TripEntity]
+     let trips: [TripEntity]
     
     @EnvironmentObject private var tripViewModel: TripViewModel
     
@@ -98,7 +98,7 @@ struct TripCarousel: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Paris"
+    trip.title = "Paris"
     trip.city = "Paris"
     trip.country = "France"
     trip.currency = "INR"

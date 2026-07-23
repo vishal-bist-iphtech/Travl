@@ -18,7 +18,7 @@ struct TripInfoSection: View {
 
             VStack(alignment: .leading, spacing: 8) {
 
-                Text(trip.destination ?? "")
+                Text(trip.title ?? "")
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
@@ -78,7 +78,7 @@ struct TripInfoSection: View {
 
     let trip = TripEntity(context: context)
 
-    trip.destination = "Paris"
+    trip.title = "Paris"
     trip.city = "Paris"
     trip.country = "France"
     trip.currency = "INR"

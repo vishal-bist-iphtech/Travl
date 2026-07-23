@@ -46,7 +46,7 @@ final class TripViewModel: ObservableObject {
     }
     
     func addTrip(
-        destination: String,
+        title: String,
         country: String,
         city: String,
         startDate: Date,
@@ -56,7 +56,7 @@ final class TripViewModel: ObservableObject {
         status: String
     ) {
         coreDataService.addTrip(
-            destination: destination,
+            title: title,
             country: country,
             city: city,
             startDate: startDate,
@@ -70,15 +70,13 @@ final class TripViewModel: ObservableObject {
     }
     
     func deleteTrip(_ trip: TripEntity) {
-        
         coreDataService.deleteTrip(trip)
-        
         refresh()
     }
     
     func updateTrip(
         trip: TripEntity,
-        destination: String,
+        title: String,
         country: String,
         city: String,
         startDate: Date,
@@ -90,7 +88,7 @@ final class TripViewModel: ObservableObject {
 
         coreDataService.updateTrip(
             trip: trip,
-            destination: destination,
+            title: title,
             country: country,
             city: city,
             startDate: startDate,
@@ -105,8 +103,6 @@ final class TripViewModel: ObservableObject {
     
     func refresh() {
         loadTrips()
-        
-        print(trips.first?.destination ?? "No Trip")
     }
     
     // MARK: - Upcoming Trips

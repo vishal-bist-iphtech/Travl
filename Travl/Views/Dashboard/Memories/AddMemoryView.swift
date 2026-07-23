@@ -166,7 +166,7 @@ struct AddMemoryView: View {
     let context = PersistenceController.shared.container.viewContext
 
     let trip = TripEntity(context: context)
-    trip.destination = "Goa"
+    trip.title = "Goa"
 
     return AddMemoryView(trip: nil)
         .environmentObject(MemoryViewModel())

@@ -92,7 +92,7 @@ struct MemoriesView: View {
             .padding()
         }
         .navigationTitle(
-            trip == nil ? "Memories" : (trip?.destination ?? "Memories")
+            trip == nil ? "Memories" : (trip?.title ?? "Memories")
         )
         .sheet(isPresented: $showAddMemory) {
             
