@@ -63,5 +63,51 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4054E1B7-4B9D-432D-9B46-31315FA4C17D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Travl/Views/Bookings/BookingsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "4054E1B7-4B9D-432D-9B46-31315FA4C17D - ec1a00892d1976b5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.ContentUnavailableView&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, SwiftUI.EmptyView&gt;, SwiftUI.ScrollView&lt;&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Group&lt;SwiftUI._ConditionalContent&lt;SwiftUI.ContentUnavailableView&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, SwiftUI.EmptyView&gt;, SwiftUI.ScrollView&lt;&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt;&gt;&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in Travl.BookingsView.body.getter : some"
+                  moduleName = "Travl.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iphtech34/Documents/Vishal%20Bist/Projects/Travl/Travl/Views/Bookings/BookingsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55">
+               </Location>
+               <Location
+                  uuid = "4054E1B7-4B9D-432D-9B46-31315FA4C17D - 53268becba37765a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.ContentUnavailableView&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, SwiftUI.EmptyView&gt;, SwiftUI.ScrollView&lt;&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Group&lt;SwiftUI._ConditionalContent&lt;SwiftUI.ContentUnavailableView&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, SwiftUI.EmptyView&gt;, SwiftUI.ScrollView&lt;&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt;&gt;&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in Travl.BookingsView.body.getter : some"
+                  moduleName = "Travl.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iphtech34/Documents/Vishal%20Bist/Projects/Travl/Travl/Views/Bookings/BookingsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
