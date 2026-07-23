@@ -15,6 +15,7 @@ struct ContentView: View {
     @StateObject private var memoryViewModel = MemoryViewModel()
     @StateObject private var bookingViewModel = BookingViewModel()
     @StateObject private var expenseViewModel = ExpenseViewModel()
+    @StateObject private var packingViewModel = PackingViewModel()
 
     @State private var showSplash = true
 
@@ -50,21 +51,18 @@ struct ContentView: View {
                     }
                     .tabItem {
 
-                        Label(
-                            "Expenses",
-                            systemImage: "indianrupeesign.circle.fill"
-                        )
+                        Label("Expenses",systemImage: "indianrupeesign.circle.fill")
                     }
 
                     NavigationStack {
-                        Text("Packing")
+                        PackingDashboardView()
                     }
                     .tabItem {
                         Label("Packing", systemImage: "suitcase.rolling.fill")
                     }
 
                     NavigationStack {
-                        Text("Weather")
+                        WeatherDashboardView()
                     }
                     .tabItem {
                         Label("Weather", systemImage: "cloud.sun.fill")
@@ -74,6 +72,7 @@ struct ContentView: View {
                 .environmentObject(memoryViewModel)
                 .environmentObject(bookingViewModel)
                 .environmentObject(expenseViewModel)
+                .environmentObject(packingViewModel)
             }
         }
         .onAppear {
