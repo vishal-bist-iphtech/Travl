@@ -6,133 +6,120 @@
 //
 
 import SwiftUI
+import CoreData
 
-struct PackingDetailsView: View {
+struct PackingDetailView: View {
 
     @EnvironmentObject private var packingViewModel: PackingViewModel
-    @EnvironmentObject private var tripViewModel: TripViewModel
+    @Environment(\.dismiss) private var dismiss
 
-    @State private var showAddPackingItem = false
+    @ObservedObject var item: PackingItemEntity
 
-    private var currentTrip: TripEntity? {
-        tripViewModel.nextTrip
-    }
+    @State private var showDeleteAlert = false
 
     var body: some View {
 
-        NavigationStack {
+        List {
 
-            ZStack(alignment: .bottomTrailing) {
+            Section("Packing Item") {
 
-                ScrollView {
+                DetailRow(
+                    title: "Item",
+                    value: item.title ?? "-"
+                )
 
-                    if let trip = currentTrip {
+                DetailRow(
+                    title: "Category",
+                    value: item.category ?? "-"
+                )
 
-                        VStack(spacing: 20) {
+                DetailRow(
+                    title: "Quantity",
+                    value: "\(item.quantity)"
+                )
 
-                            PackingProgressCard(
-                                packed: packingViewModel.packedCount(for: trip),
-                                total: packingViewModel.items(for: trip).count
-                            )
+                DetailRow(
+                    title: "Status",
+                    value: item.isPacked ? "Packed" : "Not Packed"
+                )
+            }
 
-                            PackingCategoryGrid(
-                                categories: packingViewModel.categoryBreakdown(for: trip)
-                            )
+            if let notes = item.notes,
+               !notes.isEmpty {
 
-                            VStack(alignment: .leading, spacing: 16) {
+                Section("Notes") {
 
-                                HStack {
-
-                                    Text("Recent Items")
-                                        .font(.title3.bold())
-
-                                    Spacer()
-
-                                    if !packingViewModel.items(for: trip).isEmpty {
-
-                                        NavigationLink("See All") {
-
-                                            PackingListView(trip: trip)
-                                        }
-                                    }
-                                }
-
-                                if packingViewModel.items(for: trip).isEmpty {
-
-                                    ContentUnavailableView(
-                                        "No Packing Items",
-                                        systemImage: "suitcase",
-                                        description: Text("Start building your packing checklist.")
-                                    )
-
-                                } else {
-
-                                    ForEach(
-                                        packingViewModel.recentItems(for: trip),
-                                        id: \.objectID
-                                    ) { item in
-
-                                        NavigationLink {
-
-                                            PackingDetailView(item: item)
-
-                                        } label: {
-
-                                            PackingItemRow(item: item)
-                                        }
-                                        .buttonStyle(.plain)
-                                    }
-                                }
-                            }
-                        }
-                        .padding()
-                        .padding(.bottom, 90)
-
-                    } else {
-
-                        ContentUnavailableView(
-                            "No Upcoming Trip",
-                            systemImage: "airplane.departure",
-                            description: Text("Create a trip first.")
-                        )
-                        .padding()
-                    }
+                    Text(notes)
                 }
+            }
+        }
+        .navigationTitle("Packing Item")
+        .toolbar {
 
-                Button {
+            ToolbarItemGroup(placement: .topBarTrailing) {
 
-                    showAddPackingItem = true
+                NavigationLink {
+
+                    EditPackingItemView(item: item)
+                        .environmentObject(packingViewModel)
 
                 } label: {
 
-                    Image(systemName: "plus")
-                        .font(.title2.bold())
-                        .foregroundStyle(.white)
-                        .frame(width: 60, height: 60)
-                        .background(.blue)
-                        .clipShape(Circle())
-                        .shadow(radius: 8)
+                    Image(systemName: "square.and.pencil")
                 }
-                .padding()
-            }
-            .navigationTitle("Packing")
-            .sheet(isPresented: $showAddPackingItem) {
 
-                NavigationStack {
+                Button(role: .destructive) {
 
-                    AddPackingItemView(
-                        trip: currentTrip
-                    )
+                    showDeleteAlert = true
+
+                } label: {
+
+                    Image(systemName: "trash")
                 }
-                .environmentObject(packingViewModel)
             }
+        }
+        .alert(
+            "Delete Packing Item?",
+            isPresented: $showDeleteAlert
+        ) {
+
+            Button(
+                "Delete",
+                role: .destructive
+            ) {
+
+                packingViewModel.deletePackingItem(item)
+
+                dismiss()
+            }
+
+            Button(
+                "Cancel",
+                role: .cancel
+            ) { }
+
+        } message: {
+
+            Text("This action cannot be undone.")
         }
     }
 }
 
 #Preview {
 
-    PackingDetailsView()
-        .environmentObject(PackingViewModel())
-        .environmentObject(TripViewModel())
+    let context = PersistenceController.preview.container.viewContext
+
+    let item = PackingItemEntity(context: context)
+
+    item.title = "Passport"
+    item.category = "Documents"
+    item.quantity = 1
+    item.notes = "Keep in cabin bag"
+    item.isPacked = true
+
+    return NavigationStack {
+
+        PackingDetailView(item: item)
+    }
+    .environmentObject(PackingViewModel())
 }
