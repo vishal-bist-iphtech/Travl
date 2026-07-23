@@ -368,10 +368,20 @@ final class CoreDataService {
 
     func fetchPackingItems() -> [PackingItemEntity] {
 
-        let request = PackingItemEntity.fetchRequest()
+        let request: NSFetchRequest<PackingItemEntity> =
+            PackingItemEntity.fetchRequest()
 
         request.sortDescriptors = [
-            NSSortDescriptor(keyPath: \PackingItemEntity.isPacked, ascending: true)
+
+            NSSortDescriptor(
+                key: "isPacked",
+                ascending: true
+            ),
+
+            NSSortDescriptor(
+                key: "title",
+                ascending: true
+            )
         ]
 
         do {
@@ -380,9 +390,69 @@ final class CoreDataService {
 
         } catch {
 
+            print("Failed to fetch packing items:")
             print(error.localizedDescription)
+
             return []
         }
+    }
+    
+    func addPackingItem(
+        title: String,
+        category: String,
+        quantity: Int,
+        notes: String,
+        trip: TripEntity?
+    ) {
+
+        let item = PackingItemEntity(context: context)
+
+        item.id = UUID()
+        item.title = title
+        item.category = category
+        item.quantity = Int16(quantity)
+        item.notes = notes
+        item.isPacked = false
+        item.trip = trip
+
+        saveContext()
+    }
+    
+    
+    func updatePackingItem(
+        item: PackingItemEntity,
+        title: String,
+        category: String,
+        quantity: Int,
+        notes: String,
+        isPacked: Bool
+    ) {
+
+        item.title = title
+        item.category = category
+        item.quantity = Int16(quantity)
+        item.notes = notes
+        item.isPacked = isPacked
+
+        saveContext()
+    }
+    
+    func deletePackingItem(
+        _ item: PackingItemEntity
+    ) {
+
+        context.delete(item)
+
+        saveContext()
+    }
+    
+    func togglePacked(
+        _ item: PackingItemEntity
+    ) {
+
+        item.isPacked.toggle()
+
+        saveContext()
     }
     
 }
